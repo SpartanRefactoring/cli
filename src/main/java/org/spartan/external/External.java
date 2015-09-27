@@ -1,48 +1,37 @@
 /**
  * Copyright (c) 2005, Sam Pullara. All Rights Reserved. You may modify and
- * redistribute as long as this attribution remains.
- * <p>
- * Modernized and polished by Yossi Gil yogi@cs.technion.ac.il, 2011. פרופ' יוסי
- * גיל (c)
- * <p>
- * Original copyright remains. Original version can be found <a
- * href=http://code.google.com/p/cli-parser/>here</a>.
- * <p>
+ * redistribute as long as this attribution remains. <p> Modernized and polished
+ * by Yossi Gil yogi@cs.technion.ac.il, 2011. פרופ' יוסי גיל (c) <p> Original
+ * copyright remains. Original version can be found <a
+ * href=http://code.google.com/p/cli-parser/>here</a>. <p>
  */
-package il.ac.technion.cs.ssdl.external;
+package org.spartan.external;
 
-import java.beans.IntrospectionException;
-import java.beans.PropertyDescriptor;
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.beans.*;
+import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
-import java.util.Map.Entry;
+import java.util.Map.*;
 
 /**
  * Annotation for <code><b>static</b></code> and non-<code><b>static</b></code>
  * data members whose value can be set, externally, i.e., not by usual
- * initialization or via a setter, but from command line arguments.
- * <p>
- * The value of such an annotated field can be extracted from the command line
+ * initialization or via a setter, but from command line arguments. <p> The
+ * value of such an annotated field can be extracted from the command line
  * arguments by invoking function
  * {@link Introspector#extract(String[], Object...)} or function
  * {@link Introspector#extract(List, Object...)}. The value can also be
  * extracted from @link{java.util.Properties} by means of
- * {@link Introspector#extract(Properties, Object...)}.
- * <p>
+ * {@link Introspector#extract(Properties, Object...)}. <p>
  *
  * @author Sam Pullara.
  * @author Yossi Gil <yogi@cs.technion.ac.il>
  * @since 2011-08-20
  * @see Introspector
  */
-@Documented//
-@Retention(RetentionPolicy.RUNTIME)//
-@Target({ ElementType.FIELD, ElementType.METHOD })//
+@Documented //
+@Retention(RetentionPolicy.RUNTIME) //
+@Target({ ElementType.FIELD, ElementType.METHOD }) //
 public @interface External {
   /**
    * A description of the argument that will appear in the usage method
@@ -80,17 +69,16 @@ public @interface External {
    * {@link Introspector#extract(String[], Object...)} (or function
    * {@link Introspector#extract(List, Object...)} for this matter), will
    * initialize any data member marked as @link {@link Residue} with the
-   * residual arguments, i.e., those which were not options.
-   * <p>
-   * As usual, the array component type must must have a constructor which takes
-   * a single {@link String} argument.
+   * residual arguments, i.e., those which were not options. <p> As usual, the
+   * array component type must must have a constructor which takes a single
+   * {@link String} argument.
    *
    * @author Yossi Gil
    * @since 2011-08-20
    */
-  @Documented//
-  @Retention(RetentionPolicy.RUNTIME)//
-  @Target({ ElementType.FIELD, ElementType.METHOD })//
+  @Documented //
+  @Retention(RetentionPolicy.RUNTIME) //
+  @Target({ ElementType.FIELD, ElementType.METHOD }) //
   public @interface Residue {
     //
   }
@@ -334,7 +322,8 @@ public @interface External {
         for (final PropertyDescriptor pd : descriptors(c))
           b.append(usage(target, pd));
       } catch (final Error _) {
-        // No point in treating any errors while collecting usage information
+        // No point in treating any errors while collecting usage
+        // information
       }
     }
     private static String usage(final Object target, final PropertyDescriptor p) {
@@ -398,7 +387,8 @@ public @interface External {
     private static PropertyDescriptor[] descriptors(final Class<? extends Object> c) {
       try {
         return java.beans.Introspector.getBeanInfo(c).getPropertyDescriptors();
-      } catch (final IntrospectionException _) { // Ignore errors of this sort
+      } catch (final IntrospectionException _) { // Ignore errors of this
+        // sort
         return new PropertyDescriptor[0];
       }
     }
@@ -588,8 +578,8 @@ public @interface External {
       private static String defaultsTo(final String value, final String defaultValue) {
         return empty(value) ? defaultValue : value;
       }
-      private Argument(final String name, final Class<?> type, final String alias, final boolean required,
-          final String description, final String delimiter) {
+      private Argument(final String name, final Class<?> type, final String alias, final boolean required, final String description,
+          final String delimiter) {
         this.type = type;
         this.required = required;
         this.alias = alias;

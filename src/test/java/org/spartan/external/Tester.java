@@ -1,52 +1,35 @@
 /**
  * Copyright (c) 2005, Sam Pullara. All Rights Reserved. You may modify and
- * redistribute as long as this attribution remains.
- * <p>
- * Modernized and polished by Yossi Gil yogi@cs.technion.ac.il, 2011. Original
- * copyright remains. Original version can be found <a
+ * redistribute as long as this attribution remains. <p> Modernized and polished
+ * by Yossi Gil yogi@cs.technion.ac.il, 2011. Original copyright remains.
+ * Original version can be found <a
  * href=http://code.google.com/p/cli-parser/>here</a>.
  */
-package il.ac.technion.cs.ssdl.external;
+package org.spartan.external;
 
-import static il.ac.technion.cs.ssdl.external.External.Introspector.*;
-import static il.ac.technion.cs.ssdl.external.RegexMatcher.matches;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.*;
-import static org.junit.internal.matchers.StringContains.containsString;
-import il.ac.technion.cs.ssdl.external.External.Introspector;
-import il.ac.technion.cs.ssdl.external.External.Introspector.Argument.ConstructorWithSingleStringArgumentMissing;
-import il.ac.technion.cs.ssdl.external.External.Introspector.Argument.DuplicateOption;
-import il.ac.technion.cs.ssdl.external.External.Introspector.Argument.FieldConversionError;
-import il.ac.technion.cs.ssdl.external.External.Introspector.Argument.FieldInitializationError;
-import il.ac.technion.cs.ssdl.external.External.Introspector.Argument.FieldIsFinal;
-import il.ac.technion.cs.ssdl.external.External.Introspector.Argument.InvalidEnumValue;
-import il.ac.technion.cs.ssdl.external.External.Introspector.Argument.MissingValueForOption;
-import il.ac.technion.cs.ssdl.external.External.Introspector.Argument.NumericParsingError;
-import il.ac.technion.cs.ssdl.external.External.Introspector.Argument.RequiredOption;
-import il.ac.technion.cs.ssdl.external.External.Introspector.Argument.WrongTarget;
-import il.ac.technion.cs.ssdl.external.External.Introspector.NonArray;
-import il.ac.technion.cs.ssdl.external.External.Introspector.UnrecognizedOption;
+import static org.spartan.external.External.Introspector.*;
+import static org.spartan.external.RegexMatcher.*;
 
-import java.io.File;
-import java.security.Permission;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Random;
+import java.io.*;
+import java.security.*;
+import java.util.*;
 
-import org.hamcrest.BaseMatcher;
-import org.hamcrest.Description;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.hamcrest.*;
+import org.junit.*;
+import org.spartan.external.External.*;
+import org.spartan.external.External.Introspector.*;
+import org.spartan.external.External.Introspector.Argument.*;
 
 /**
  * @author: Sam Pullara.
  * @author: Yossi Gil <yogi@cs.technion.ac.il> פרופ' יוסי גיל
  * @since: Dec 27, 2005 Time: 3:31:44 PM
  */
-@SuppressWarnings("static-method")//
+@SuppressWarnings("static-method") //
 public class Tester extends Generator {
   private static final int FIRST_LASTINT_VALUE = 1033096058;
 
@@ -274,7 +257,7 @@ public class Tester extends Generator {
       public int getOption() {
         return option;
       }
-      @External(name = "input")//
+      @External(name = "input") //
       public void setOption(final int option) {
         this.option = option;
       }
@@ -291,7 +274,7 @@ public class Tester extends Generator {
       public int getOption() {
         return option;
       }
-      @External//
+      @External //
       public void setOption(final int inputFilename) {
         option = inputFilename;
       }
@@ -336,13 +319,12 @@ public class Tester extends Generator {
       public String getOption() {
         return inputFilename;
       }
-      @SuppressWarnings("unused")//
-      @External(name = "input", value = "This is the input file", required = true)//
+      @External(name = "input", value = "This is the input file", required = true) //
       public void setInputFilename(final String inputFilename) {
         this.inputFilename = inputFilename;
       }
 
-      @External(name = "output", alias = "o", value = "This is the output file", required = true)//
+      @External(name = "output", alias = "o", value = "This is the output file", required = true) //
       private File outputFile;
 
       public File getOutputFile() {
@@ -360,13 +342,11 @@ public class Tester extends Generator {
       public boolean isSomeoption() {
         return someoption;
       }
-      @SuppressWarnings("unused")//
-      @External(value = "This option can optionally be set")//
+      @External(value = "This option can optionally be set") //
       public void setSomeoption(final boolean someoption) {
         this.someoption = someoption;
       }
-      @SuppressWarnings("unused")//
-      @External(value = "This option can optionally be set")//
+      @External(value = "This option can optionally be set") //
       public void setSomeotheroption(final boolean someotheroption) {
         this.someotheroption = someotheroption;
       }
@@ -376,8 +356,7 @@ public class Tester extends Generator {
       public Integer getMinimum() {
         return minimum;
       }
-      @SuppressWarnings("unused")//
-      @External(value = "Minimum", alias = "m")//
+      @External(value = "Minimum", alias = "m") //
       public void setMinimum(final Integer minimum) {
         this.minimum = minimum;
       }
@@ -387,8 +366,7 @@ public class Tester extends Generator {
       public Integer[] getValues() {
         return values;
       }
-      @SuppressWarnings("unused")//
-      @External(value = "List of values", delimiter = ":")//
+      @External(value = "List of values", delimiter = ":") //
       public void setValues(final Integer[] values) {
         this.values = values;
       }
@@ -396,7 +374,7 @@ public class Tester extends Generator {
     final _ _ = new _();
     final List<String> extra = extract(args( //
         "-input", "inputfile", //
-        "-o", "outputfile",//
+        "-o", "outputfile", //
         "extra1", //
         "-someoption", //
         "extra2", //
@@ -421,8 +399,7 @@ public class Tester extends Generator {
       public String getOption() {
         return inputFilename;
       }
-      @SuppressWarnings("unused")//
-      @External(name = "input")//
+      @External(name = "input") //
       public void setInputFilename(final String inputFilename) {
         this.inputFilename = inputFilename;
       }
@@ -443,7 +420,7 @@ public class Tester extends Generator {
         "-m", "10", //
         "for", "all", //
         "-values", "1:2:3", //
-        "-strings", "sam;dave;jolly",//
+        "-strings", "sam;dave;jolly", //
         "good", "men"//
     ), tc);
     assertEquals("inputfile", tc.inputFilename);
@@ -459,6 +436,7 @@ public class Tester extends Generator {
     final TestCommand _ = new TestCommand();
     extract(new Properties() {
       private static final long serialVersionUID = 1L;
+
       {
         put("input", "inputfile");
         put("o", "outputfile");
@@ -478,7 +456,6 @@ public class Tester extends Generator {
   }
   @Test public void propertiesViaSetter() {
     final Object _ = new Object() {
-      @SuppressWarnings("unused")//
       @External(name = "option") public void setHashCode(final int hashCode) {
         this.hashCode = hashCode;
       }
@@ -493,16 +470,17 @@ public class Tester extends Generator {
       {
         put("option", nextIntS());
       }
+
       private static final long serialVersionUID = 1L;
     }, _);
     assertEquals(lastInt(), _.hashCode());
   }
   @Test public void toProperties() {
     final Properties p = Introspector.toProperties(new Object() {
-      @External @SuppressWarnings("unused") private final String key1 = "value1";
+      @External private final String key1 = "value1";
       @SuppressWarnings("unused") private String key2 = "value2";
 
-      @External @SuppressWarnings("unused") public void setKey2(final String key2) {
+      @External public void setKey2(final String key2) {
         this.key2 = key2;
       }
     });
@@ -515,40 +493,40 @@ public class Tester extends Generator {
   @Test public void toOrderedMapTwoObjects() {
     final Map<String, String> m = Introspector.toOrderedMap(new Object() {
       private int key = 10;
-      @External @SuppressWarnings("unused") private final int _1_1 = ++key;
-      @External @SuppressWarnings("unused") private final int _1_2 = ++key;
-      @External @SuppressWarnings("unused") private final int _1_3 = ++key;
-      @External @SuppressWarnings("unused") private final int _1_4 = ++key;
-      @External @SuppressWarnings("unused") private final int _1_5 = ++key;
+      @External private final int _1_1 = ++key;
+      @External private final int _1_2 = ++key;
+      @External private final int _1_3 = ++key;
+      @External private final int _1_4 = ++key;
+      @External private final int _1_5 = ++key;
     }, new Object() {
       private int key = 20;
-      @External @SuppressWarnings("unused") private final int _2_1 = ++key;
-      @External @SuppressWarnings("unused") private final int _2_2 = ++key;
-      @External @SuppressWarnings("unused") private final int _2_3 = ++key;
-      @External @SuppressWarnings("unused") private final int _2_4 = ++key;
-      @External @SuppressWarnings("unused") private final int _2_5 = ++key;
+      @External private final int _2_1 = ++key;
+      @External private final int _2_2 = ++key;
+      @External private final int _2_3 = ++key;
+      @External private final int _2_4 = ++key;
+      @External private final int _2_5 = ++key;
     });
     assertEquals("[_1_1, _1_2, _1_3, _1_4, _1_5, _2_1, _2_2, _2_3, _2_4, _2_5]", m.keySet().toString());
     assertEquals("[11, 12, 13, 14, 15, 21, 22, 23, 24, 25]", m.values().toString());
   }
   @Test public void toOrderedDuplicateOptions() {
     final Map<String, String> m = Introspector.toOrderedMap(new Object() {
-      @External @SuppressWarnings("unused") private final int option = 100;
+      @External private final int option = 100;
     }, new Object() {
-      @External @SuppressWarnings("unused") private final int option = 200;
+      @External private final int option = 200;
     });
     assertEquals("[option]", m.keySet().toString());
     assertEquals("[100]", m.values().toString());
   }
   @Test public void toOrderedMapGetterMethods() {
     final Map<String, String> m = Introspector.toOrderedMap(new Object() {
-      @External @SuppressWarnings("unused") private final String method1() {
+      @External private final String method1() {
         return "value1";
       }
-      @External @SuppressWarnings("unused") private final String method2() {
+      @External private final String method2() {
         return "value2";
       }
-      @External @SuppressWarnings("unused") private final String method3() {
+      @External private final String method3() {
         return "value3";
       }
     });
@@ -585,8 +563,7 @@ public class Tester extends Generator {
     final Map<String, String> m = Introspector.toOrderedMap(new Object() {
       private final int returnedValue = nextInt();
 
-      @SuppressWarnings("unused")//
-      @External(name="myName") public final int badName() {
+      @External(name = "myName") public final int badName() {
         return returnedValue;
       }
     });
@@ -650,7 +627,7 @@ public class Tester extends Generator {
   }
   @Test(expected = NonArray.class) public void residueNonArray() {
     extract(args(0), new Object() {
-      @External.Residue @SuppressWarnings("unused") File _;
+      @External.Residue File _;
     });
   }
   @Test public void residueSingleField() {
@@ -712,24 +689,24 @@ public class Tester extends Generator {
     assertEquals(new File("hello"), ResidueStaticField._2[1]);
     assertEquals(new File(".a"), _._3[2]);
   }
-  @Test(expected = InvalidEnumValue.class)//
+  @Test(expected = InvalidEnumValue.class) //
   public void invalidEnumOption() {
     extract(args("-option", nextIntS()), ClassWithEnumOption.class);
   }
-  @Test(expected = InvalidEnumValue.class)//
+  @Test(expected = InvalidEnumValue.class) //
   public void invalidEnumViaProperties() {
     extract(new Properties() {
       {
         put("option", nextIntS());
       }
+
       private static final long serialVersionUID = 1L;
     }, ClassWithEnumOption.class);
   }
-  @Test(expected = FieldConversionError.class)//
+  @Test(expected = FieldConversionError.class) //
   public void propertiesSetterThrowsException() {
     final Object _ = new Object() {
-      @SuppressWarnings("unused")//
-      @External public void setHashCode(final int hashCode) {
+      @External public void setHashCode(@SuppressWarnings("unused") final int hashCode) {
         throw new RuntimeException();
       }
 
@@ -743,14 +720,14 @@ public class Tester extends Generator {
       {
         put("hashCode", nextIntS());
       }
+
       private static final long serialVersionUID = 1L;
     }, _);
   }
-  @Test(expected = FieldConversionError.class)//
+  @Test(expected = FieldConversionError.class) //
   public void argumentsSetterThrowsException() {
     final Object _ = new Object() {
-      @SuppressWarnings("unused")//
-      @External public void setHashCode(final int hashCode) {
+      @External public void setHashCode(@SuppressWarnings("unused") final int hashCode) {
         throw new RuntimeException();
       }
 
@@ -806,9 +783,7 @@ public class Tester extends Generator {
     assertEquals(8432, derived.option());
   }
   @Test public void inheritedRequiredStaticFields() {
-    final List<String> leftOver = extract(args(
-    //
-        "-output", "outputValue", //
+    final List<String> leftOver = extract(args("-output", "outputValue", //
         "-key", "keyValue", //
         "-inheritedkey", "inheritedKeyValue"), InhertingFromRequiredFields.class);
     assertEquals(0, leftOver.size());
@@ -898,7 +873,7 @@ public class Tester extends Generator {
   }
   @Test public void settingsContainsKeyValue() {
     final String it = settings(new Object() {
-      @External @SuppressWarnings("unused") String option = "value";
+      @External String option = "value";
     });
     assertThat(it, containsString("option"));
     assertThat(it, containsString("value"));
@@ -907,36 +882,36 @@ public class Tester extends Generator {
   }
   @Test public void settingsIsOrdered() {
     assertThat(settings(new Object() {
-      @External @SuppressWarnings("unused") int This;
-      @External @SuppressWarnings("unused") int is;
-      @External @SuppressWarnings("unused") int the;
-      @External @SuppressWarnings("unused") int time;
-      @External @SuppressWarnings("unused") int for_all;
-      @External @SuppressWarnings("unused") int good;
-      @External @SuppressWarnings("unused") int men;
+      @External int This;
+      @External int is;
+      @External int the;
+      @External int time;
+      @External int for_all;
+      @External int good;
+      @External int men;
     }), matches("(?s).*This.*is.*the.*time.*for_all.*good.*men.*"));
   }
 
-  static class ClassWithProperties {
-    @External public void setThis(@SuppressWarnings("unused") final int _) {
+  @SuppressWarnings("unused") static class ClassWithProperties {
+    @External public void setThis(final int _) {
       // filler property function
     }
-    @External public void setIs(@SuppressWarnings("unused") final int _) {
+    @External public void setIs(final int _) {
       // filler property function
     }
-    @External public void setThe(@SuppressWarnings("unused") final int _) {
+    @External public void setThe(final int _) {
       // filler property function
     }
-    @External public void setTime(@SuppressWarnings("unused") final int _) {
+    @External public void setTime(final int _) {
       // filler property function
     }
-    @External public void setFor_all(@SuppressWarnings("unused") final int for_all) {
+    @External public void setFor_all(final int for_all) {
       // filler property function
     }
-    @External public void setGood(@SuppressWarnings("unused") final int good) {
+    @External public void setGood(final int good) {
       // filler property function
     }
-    @External public void setMen(@SuppressWarnings("unused") final int men) {
+    @External public void setMen(final int men) {
       // filler property function
     }
   }
@@ -952,14 +927,14 @@ public class Tester extends Generator {
   }
   @Test public void settingsContainsTargetNamesInOrder() {
     class This {
-      @External @SuppressWarnings("unused") int is;
-      @External @SuppressWarnings("unused") int the;
-      @External @SuppressWarnings("unused") int time;
+      @External int is;
+      @External int the;
+      @External int time;
     }
     class For {
-      @External @SuppressWarnings("unused") int all;
-      @External @SuppressWarnings("unused") int good;
-      @External @SuppressWarnings("unused") int men;
+      @External int all;
+      @External int good;
+      @External int men;
     }
     assertThat(settings(new This(), new For()), matches("(?s).*This:.*is.*the.*time.*For:.*all.*good.*men.*"));
   }
@@ -969,7 +944,7 @@ public class Tester extends Generator {
   }
   @Test public void usageOrdinaryField() {
     class _ {
-      @SuppressWarnings("unused") @External int a = nextInt();
+      @External int a = nextInt();
     }
     assertThat(usage(new _()), containsString("" + lastInt()));
   }
@@ -988,13 +963,13 @@ public class Tester extends Generator {
   }
   @Test public void usageValueFieldFoundInDescription() {
     assertThat(usage(new Object() {
-      @SuppressWarnings("unused")//
+      //
       public @External("lorem ipsum") int a;
     }), containsString("lorem ipsum"));
   }
   @Test public void usageullDescriptionConcatenatesValueAndDescription() {
     assertThat(usage(new Object() {
-      @SuppressWarnings("unused")//
+      //
       public @External(value = "lorem ip", description = "sum") int a;
     }), containsString("lorem ipsum"));
   }
@@ -1002,7 +977,7 @@ public class Tester extends Generator {
     final String s = usage(new Object() {
       @SuppressWarnings("unused") private String input = "inputValue";
 
-      @External @SuppressWarnings("unused") public void setInput(final String input) {
+      @External public void setInput(final String input) {
         this.input = input;
       }
     });
@@ -1010,11 +985,11 @@ public class Tester extends Generator {
   }
   @Test public void usageCorrectOrder() {
     assertTrue(usage(new Object() {
-      @SuppressWarnings("unused") @External int AAA;
-      @SuppressWarnings("unused") @External int BBB;
-      @SuppressWarnings("unused") @External int CCC;
-      @SuppressWarnings("unused") @External int DDD;
-      @SuppressWarnings("unused") @External int EEE;
+      @External int AAA;
+      @External int BBB;
+      @External int CCC;
+      @External int DDD;
+      @External int EEE;
     }).matches("(?s).*AAA.*BBB.*CCC.*DDD.*EEE.*"));
   }
   @Test public void usagePrivateField() {
@@ -1026,7 +1001,7 @@ public class Tester extends Generator {
   @Test(expected = UnrecognizedOption.class) public void unrecognizedStaticOption() {
     extract(args("-option", nextIntS()), Object.class);
   }
-  @Test(expected = FieldInitializationError.class)//
+  @Test(expected = FieldInitializationError.class) //
   public void exceptionThrowingInitializationOfField() {
     extract(args("-option", nextIntS()), ExceptionThrowingInitializationOfField.class);
   }
@@ -1053,39 +1028,37 @@ public class Tester extends Generator {
   }
   @Test(expected = DuplicateOption.class) public void simpleRepeatedOption() {
     extract(args("-option", nextIntS(), "-option", nextIntS()), new Object() {
-      @External @SuppressWarnings("unused") public String option = nextIntS();
+      @External public String option = nextIntS();
     });
   }
   @Test(expected = NumericParsingError.class) public void numericError() {
     extract(args("-option", "ab" + nextInt()), new Object() {
-      @SuppressWarnings("unused") @External public int option = nextInt();
+      @External public int option = nextInt();
     });
   }
   @Test(expected = WrongTarget.class) public void instanceDataMemberThroughClassObject() {
     class LocalClass {
-      @External @SuppressWarnings("unused") private final int n = 0;
+      @External private final int n = 0;
     }
     extract(args("-n", nextIntS()), LocalClass.class);
   }
-  @Test(expected = ConstructorWithSingleStringArgumentMissing.class)//
+  @Test(expected = ConstructorWithSingleStringArgumentMissing.class) //
   public void missingStringConstructor() {
     class LocalClass {
       @SuppressWarnings("unused") private final int _;
 
-      /**
-       * This is not really a string constructor since it is an inner class
-       */
+      /** This is not really a string constructor since it is an inner class */
       @SuppressWarnings("unused") LocalClass(final String a) {
         _ = a.hashCode();
       }
     }
     extract(args("-option", nextIntS()), new Object() {
-      @External @SuppressWarnings("unused") public LocalClass option;
+      @External public LocalClass option;
     });
   }
   @Test(expected = FieldConversionError.class) public void constructorThrowsException() throws Exception {
     extract(args("-option", "value"), new Object() {
-      @External @SuppressWarnings("unused") public OptionClass option;
+      @External public OptionClass option;
     });
   }
   @Test(expected = MissingValueForOption.class) public void missingValue() {
@@ -1099,7 +1072,6 @@ public class Tester extends Generator {
   }
   @Test(expected = RequiredOption.class) public void missingRequiredOptionProperties() {
     extract(new Properties(), new Object() {
-      @SuppressWarnings("unused")//
       @External(required = true) public int option;
     });
   }
@@ -1108,12 +1080,12 @@ public class Tester extends Generator {
   }
   @Test public void usageArray() {
     assertThat(usage(new Object() {
-      @External @SuppressWarnings("unused") String[] strings = { "Hello", "World!" };
+      @External String[] strings = { "Hello", "World!" };
     }), containsString("Hello, World!"));
   }
   @Test public void usageBoolean() {
     assertThat(usage(new Object() {
-      @External @SuppressWarnings("unused") boolean _;
+      @External boolean _;
     }), containsString("flag"));
   }
   @Test public void usageProperty() {
@@ -1123,7 +1095,7 @@ public class Tester extends Generator {
       @SuppressWarnings("unused") public boolean isOption() {
         return option;
       }
-      @External @SuppressWarnings("unused") public void setOption(final boolean option) {
+      @External public void setOption(final boolean option) {
         this.option = option;
       }
     }), containsString("option"));
@@ -1135,21 +1107,21 @@ public class Tester extends Generator {
       @SuppressWarnings("unused") public String getOption() {
         return option;
       }
-      @External @SuppressWarnings("unused") public void setOption(final String option) {
+      @External public void setOption(final String option) {
         this.option = option;
       }
     }), containsString("myValue"));
   }
   @Test public void usagePropertyReadThrowsException() {
     final String usage = usage(new Object() {
-      @SuppressWarnings("unused") @External private final String firstOption = "firstValue";
+      @External private final String firstOption = "firstValue";
       @SuppressWarnings("unused") private String option = "myValue";
-      @SuppressWarnings("unused") @External private final String secondOption = "secondValue";
+      @External private final String secondOption = "secondValue";
 
       @SuppressWarnings("unused") public String getOption() {
         throw new RuntimeException();
       }
-      @External @SuppressWarnings("unused") public void setOption(final String option) {
+      @External public void setOption(final String option) {
         this.option = option;
       }
     });
@@ -1240,19 +1212,15 @@ public class Tester extends Generator {
   }
 
   private static class PrivateStaticField {
-    @SuppressWarnings("unused")//
     @External private static Date optionNamePrivateStaticField = new Date();
   }
 
   private static class PublicStaticFields {
-    @SuppressWarnings("unused")//
     @External public static Date optionNamePublicField = new Date();
-    @SuppressWarnings("unused")//
     @External public static String stringOption = "" + new Tester().lastInt();
   }
 
   private static class ExceptionThrowingInitializationOfField extends Tester {
-    @SuppressWarnings("unused")//
     @External public static int option = exceptionThrowing();
 
     private static int exceptionThrowing() {
@@ -1315,35 +1283,35 @@ public class Tester extends Generator {
     public String getInputFilename() {
       return inputFilename;
     }
-    @External(name = "input", value = "This is the input file", required = true)//
+    @External(name = "input", value = "This is the input file", required = true) //
     public void setInputFilename(final String inputFilename) {
       this.inputFilename = inputFilename;
     }
     public File getOutputFile() {
       return outputFile;
     }
-    @External(name = "output", alias = "o", value = "This is the output file", required = true)//
+    @External(name = "output", alias = "o", value = "This is the output file", required = true) //
     public void setOutputFile(final File outputFile) {
       this.outputFile = outputFile;
     }
     public boolean isSomeoption() {
       return someoption;
     }
-    @External(value = "This option can optionally be set")//
+    @External(value = "This option can optionally be set") //
     public void setSomeoption(final boolean someoption) {
       this.someoption = someoption;
     }
     public Integer getMinimum() {
       return minimum;
     }
-    @External(value = "Minimum", alias = "m")//
+    @External(value = "Minimum", alias = "m") //
     public void setMinimum(final Integer minimum) {
       this.minimum = minimum;
     }
     public Integer[] getValues() {
       return values;
     }
-    @External(value = "List of values", delimiter = ":")//
+    @External(value = "List of values", delimiter = ":") //
     public void setValues(final Integer[] values) {
       this.values = values;
     }
@@ -1417,7 +1385,7 @@ class Generator {
 
 /**
  * Borrowed from <a
- * href="http://piotrga.wordpress.com/2009/03/27/hamcrest-regex-matcher/">Piotr
+ * href="http://piotrga.wordpress.com/2009/03/27/hamcrest-regex-matcher/"> Piotr
  * Gabryanczyk's blog</a>
  *
  * @author Yossi Gil
