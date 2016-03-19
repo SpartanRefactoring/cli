@@ -5,13 +5,30 @@
  * copyright remains. Original version can be found <a
  * href=http://code.google.com/p/cli-parser/>here</a>. <p>
  */
-package org.spartan.external;
+package il.org.spartan.external;
 
-import java.beans.*;
-import java.lang.annotation.*;
-import java.lang.reflect.*;
-import java.util.*;
-import java.util.Map.*;
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Properties;
+import java.util.Set;
 
 /**
  * Annotation for <code><b>static</b></code> and non-<code><b>static</b></code>
@@ -25,7 +42,7 @@ import java.util.Map.*;
  * {@link Introspector#extract(Properties, Object...)}. <p>
  *
  * @author Sam Pullara.
- * @author Yossi Gil <yogi@cs.technion.ac.il>
+ * @author Yossi Gil {@literal <yogi@cs.technion.ac.il>}
  * @since 2011-08-20
  * @see Introspector
  */
@@ -68,7 +85,7 @@ public @interface External {
    * as {@link External}. Thus, a call to function
    * {@link Introspector#extract(String[], Object...)} (or function
    * {@link Introspector#extract(List, Object...)} for this matter), will
-   * initialize any data member marked as @link {@link Residue} with the
+   * initialize any data member marked as {@link Residue} with the
    * residual arguments, i.e., those which were not options. <p> As usual, the
    * array component type must must have a constructor which takes a single
    * {@link String} argument.
@@ -108,7 +125,7 @@ public @interface External {
       return extract(cloneAsList(args), targets);
     }
     /**
-     * Extract <keyword,value> pairs from a list of arguments, as specified by
+     * Extract <code>&lt;keyword,value&gt;</code> pairs from a list of arguments, as specified by
      * the {@link External} decorated fields of given object; set these fields,
      * and return the remaining arguments
      *
@@ -118,7 +135,7 @@ public @interface External {
      *          An array of items, each being an instance or a class object, in
      *          which {@link External} specifications are to be found. The first
      *          element is interpreted also as the specifier of the main class.
-     * @return the command line arguments, where the <keyword,value> pairs are
+     * @return the command line arguments, where the <code>&lt;keyword,value&gt;</code> pairs are
      *         removed.
      * @throws Introspector.Argument.ParsingError
      *           in case the command line arguments could not be parsed
@@ -230,7 +247,7 @@ public @interface External {
       return $.toString();
     }
     /**
-     * Convert the settings in the parameter as a set of <String,String>
+     * Convert the settings in the parameter as a set of <code>&lt;String, String&gt;</code>
      * entries, in the order that they were defined.
      *
      * @param targets

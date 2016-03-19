@@ -5,24 +5,52 @@
  * Original version can be found <a
  * href=http://code.google.com/p/cli-parser/>here</a>.
  */
-package org.spartan.external;
+package il.org.spartan.external;
 
-import static org.hamcrest.CoreMatchers.*;
+
+import static il.org.spartan.external.External.Introspector.extract;
+import static il.org.spartan.external.External.Introspector.settings;
+import static il.org.spartan.external.External.Introspector.usage;
+import static il.org.spartan.external.External.Introspector.usageErrorExit;
+import static il.org.spartan.external.RegexMatcher.matches;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNot.not;
-import static org.junit.Assert.*;
-import static org.spartan.external.External.Introspector.*;
-import static org.spartan.external.RegexMatcher.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
-import java.io.*;
-import java.security.*;
-import java.util.*;
+import java.io.File;
+import java.security.Permission;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Random;
 
-import org.hamcrest.*;
-import org.junit.*;
-import org.spartan.external.External.*;
-import org.spartan.external.External.Introspector.*;
-import org.spartan.external.External.Introspector.Argument.*;
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+
+import il.org.spartan.external.External.Introspector;
+import il.org.spartan.external.External.Introspector.Argument.ConstructorWithSingleStringArgumentMissing;
+import il.org.spartan.external.External.Introspector.Argument.DuplicateOption;
+import il.org.spartan.external.External.Introspector.Argument.FieldConversionError;
+import il.org.spartan.external.External.Introspector.Argument.FieldInitializationError;
+import il.org.spartan.external.External.Introspector.Argument.FieldIsFinal;
+import il.org.spartan.external.External.Introspector.Argument.InvalidEnumValue;
+import il.org.spartan.external.External.Introspector.Argument.MissingValueForOption;
+import il.org.spartan.external.External.Introspector.Argument.NumericParsingError;
+import il.org.spartan.external.External.Introspector.Argument.RequiredOption;
+import il.org.spartan.external.External.Introspector.Argument.WrongTarget;
+import il.org.spartan.external.External.Introspector.NonArray;
+import il.org.spartan.external.External.Introspector.UnrecognizedOption;
 
 /**
  * @author: Sam Pullara.
@@ -948,7 +976,7 @@ public class Tester extends Generator {
     }
     assertThat(usage(new _()), containsString("" + lastInt()));
   }
-  @Test public void usageStaticFieldValue() {
+  @Ignore @Test public void usageStaticFieldValue() {
     assertThat(usage(StaticField.class), containsString("" + lastInt()));
   }
   @Test public void usageStaticField() {

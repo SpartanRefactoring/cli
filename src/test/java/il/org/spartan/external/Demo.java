@@ -5,12 +5,16 @@
  * Original version can be found <a
  * href=http://code.google.com/p/cli-parser/>here</a>.
  */
-package org.spartan.external;
+package il.org.spartan.external;
 
-import static org.spartan.external.External.Introspector.*;
+import static il.org.spartan.external.External.Introspector.extract;
+import static il.org.spartan.external.External.Introspector.settings;
+import static il.org.spartan.external.External.Introspector.toProperties;
+import static il.org.spartan.external.External.Introspector.usage;
+import static il.org.spartan.external.External.Introspector.usageErrorExit;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.util.List;
 
 /**
  * A simple demonstration of the capabilities of use of {@link External} and the
