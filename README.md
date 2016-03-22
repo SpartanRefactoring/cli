@@ -1,0 +1,1 @@
+# CLI [![Build Status](https://travis-ci.org/SpartanRefactoring/cli.svg?branch=master)](https://travis-ci.org/SpartanRefactoring/cli) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/il.org.spartan/cli/badge.svg)](https://maven-badges.herokuapp.com/maven-central/il.org.spartan/cli/)
