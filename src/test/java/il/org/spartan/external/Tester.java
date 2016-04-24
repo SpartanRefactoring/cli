@@ -59,7 +59,7 @@ import il.org.spartan.external.External.Introspector.UnrecognizedOption;
  */
 @SuppressWarnings("static-method") //
 public class Tester extends Generator {
-  private static final int FIRST_LASTINT_VALUE = 1033096058;
+  private static final int FIRST__LASTINT__VALUE = 1033096058;
 
   @Before public void before() {
     oldSecurityManager = System.getSecurityManager();
@@ -69,18 +69,18 @@ public class Tester extends Generator {
   }
   @Test public void byteCheck() {
     assertTrue(nextByte() != nextByte());
-    final byte _ = nextByte();
-    assertEquals(_, lastByte());
+    final byte __ = nextByte();
+    assertEquals(__, lastByte());
   }
   @Test public void shortCheck() {
     assertTrue(nextShort() != nextShort());
-    final short _ = nextShort();
-    assertEquals(_, lastShort());
+    final short __ = nextShort();
+    assertEquals(__, lastShort());
   }
   @Test public void intCheck() {
     assertTrue(nextInt() != nextInt());
-    final int _ = nextInt();
-    assertEquals(_, lastInt());
+    final int __ = nextInt();
+    assertEquals(__, lastInt());
   }
   @Test public void twoLastIntAreIdentical() {
     final int i1 = new Tester().lastInt();
@@ -93,28 +93,28 @@ public class Tester extends Generator {
     assertEquals(i1, i2);
   }
   @Test public void whatIsMyLastInt() {
-    assertEquals(FIRST_LASTINT_VALUE, lastInt());
+    assertEquals(FIRST__LASTINT__VALUE, lastInt());
   }
   @Test public void longCheck() {
     assertTrue(nextLong() != nextLong());
-    final long _ = nextLong();
-    assertEquals(_, lastLong());
+    final long __ = nextLong();
+    assertEquals(__, lastLong());
   }
   @Test public void floatCheck() {
     assertTrue(nextFloat() != nextFloat());
-    final float _ = nextFloat();
-    assertEquals(_, lastFloat(), 1E-8);
+    final float __ = nextFloat();
+    assertEquals(__, lastFloat(), 1E-8);
   }
   @Test public void doubleCheck() {
     assertTrue(nextDouble() != nextDouble());
-    final double _ = nextDouble();
-    assertEquals(_, lastDouble(), 1E-15);
+    final double __ = nextDouble();
+    assertEquals(__, lastDouble(), 1E-15);
   }
   @Test public void byteOption() {
-    class _ {
+    class __ {
       @External public byte option = nextByte();
     }
-    final _ it = new _();
+    final __ it = new __();
     extract(args("-option", "" + nextByte()), it);
     assertEquals(lastByte(), it.option);
   }
@@ -127,32 +127,32 @@ public class Tester extends Generator {
     assertEquals(lastShort(), s.s);
   }
   @Test public void intOption() {
-    class _ {
+    class __ {
       @External public int option = nextInt();
 
       int option() {
         return option;
       }
     }
-    final _ it = new _();
+    final __ it = new __();
     extract(args("-option", nextIntS()), it);
     assertEquals(lastInt(), it.option());
   }
   @Test public void longOption() {
-    class _ {
+    class __ {
       @External public long option = 123456789;
     }
-    final _ it = new _();
+    final __ it = new __();
     extract(args("-option", "9876543210"), it);
     assertEquals(9876543210L, it.option);
   }
   @Test public void floatOption() {
-    class _ {
+    class __ {
       @External public float f = nextFloat();
     }
-    final _ _ = new _();
-    extract(args("-f", "" + nextFloat()), _);
-    assertEquals(lastFloat(), _.f, 1E-5);
+    final __ __ = new __();
+    extract(args("-f", "" + nextFloat()), __);
+    assertEquals(lastFloat(), __.f, 1E-5);
   }
   @Test public void doubleOption() {
     class DoubleOption {
@@ -171,12 +171,12 @@ public class Tester extends Generator {
     assertEquals(lastInt(), i.i.intValue());
   }
   @Test public void stringOption() {
-    class _ {
+    class __ {
       @External public String s = "This is the time";
     }
-    final _ _ = new _();
-    extract(args("-s", "for all good men"), _);
-    assertEquals("for all good men", _.s);
+    final __ __ = new __();
+    extract(args("-s", "for all good men"), __);
+    assertEquals("for all good men", __.s);
   }
   @Test public void enumOption() {
     extract(args("-option", "EnumB"), ClassWithEnumOption.class);
@@ -279,7 +279,7 @@ public class Tester extends Generator {
     assertEquals(3, o.ds[i++], 1E-5);
   }
   @Test public void setterFunctionInt() {
-    class _ {
+    class __ {
       private int option;
 
       public int getOption() {
@@ -290,13 +290,13 @@ public class Tester extends Generator {
         this.option = option;
       }
     }
-    final _ _ = new _();
-    _.setOption(nextInt());
-    extract(args("-input", nextIntS()), _);
-    assertEquals(lastInt(), _.getOption());
+    final __ __ = new __();
+    __.setOption(nextInt());
+    extract(args("-input", nextIntS()), __);
+    assertEquals(lastInt(), __.getOption());
   }
   @Test public void unNamedSetterFunctionInt() {
-    class _ {
+    class __ {
       private int option;
 
       public int getOption() {
@@ -307,10 +307,10 @@ public class Tester extends Generator {
         option = inputFilename;
       }
     }
-    final _ _ = new _();
-    _.setOption(nextInt());
-    extract(args("-option", nextIntS()), _);
-    assertEquals(lastInt(), _.getOption());
+    final __ __ = new __();
+    __.setOption(nextInt());
+    extract(args("-option", nextIntS()), __);
+    assertEquals(lastInt(), __.getOption());
   }
 
   static class StaticPrivateField {
@@ -341,7 +341,7 @@ public class Tester extends Generator {
     assertEquals("keyValue", RequiredStaticFields.key);
   }
   @Test public void mixedOptions() {
-    class _ {
+    class __ {
       private String inputFilename;
 
       public String getOption() {
@@ -399,7 +399,7 @@ public class Tester extends Generator {
         this.values = values;
       }
     }
-    final _ _ = new _();
+    final __ __ = new __();
     final List<String> extra = extract(args( //
         "-input", "inputfile", //
         "-o", "outputfile", //
@@ -408,20 +408,20 @@ public class Tester extends Generator {
         "extra2", //
         "-m", "10", //
         "-values", "1:2:3"//
-    ), _);
-    assertEquals("inputfile", _.getOption());
-    assertEquals(new File("outputfile"), _.getOutputFile());
-    assertFalse(_.isSomeotheroption());
-    assertTrue(_.isSomeoption());
-    assertEquals(10, _.getMinimum().intValue());
-    assertEquals(3, _.getValues().length);
-    assertEquals(1, _.getValues()[0].intValue());
-    assertEquals(2, _.getValues()[1].intValue());
-    assertEquals(3, _.getValues()[2].intValue());
+    ), __);
+    assertEquals("inputfile", __.getOption());
+    assertEquals(new File("outputfile"), __.getOutputFile());
+    assertFalse(__.isSomeotheroption());
+    assertTrue(__.isSomeoption());
+    assertEquals(10, __.getMinimum().intValue());
+    assertEquals(3, __.getValues().length);
+    assertEquals(1, __.getValues()[0].intValue());
+    assertEquals(2, __.getValues()[1].intValue());
+    assertEquals(3, __.getValues()[2].intValue());
     assertEquals(2, extra.size());
   }
   @Test public void setterFunctionString() {
-    class _ {
+    class __ {
       private String inputFilename;
 
       public String getOption() {
@@ -432,9 +432,9 @@ public class Tester extends Generator {
         this.inputFilename = inputFilename;
       }
     }
-    final _ _ = new _();
-    extract(args("-input", "inputfile"), _);
-    assertEquals("inputfile", _.getOption());
+    final __ __ = new __();
+    extract(args("-input", "inputfile"), __);
+    assertEquals("inputfile", __.getOption());
   }
   @Test public void remainingArguments() {
     final TestCommand tc = new TestCommand();
@@ -461,7 +461,7 @@ public class Tester extends Generator {
     assertEquals("[this, is, the, time, for, all, good, men]", extra.toString());
   }
   @Test public void properties() {
-    final TestCommand _ = new TestCommand();
+    final TestCommand __ = new TestCommand();
     extract(new Properties() {
       private static final long serialVersionUID = 1L;
 
@@ -473,17 +473,17 @@ public class Tester extends Generator {
         put("values", "1:2:3");
         put("strings", "sam;dave;jolly");
       }
-    }, _);
-    assertEquals("inputfile", _.inputFilename);
-    assertEquals(new File("outputfile"), _.outputFile);
-    assertTrue(_.someoption);
-    assertEquals(10, _.minimum.intValue());
-    assertEquals(3, _.values.length);
-    assertEquals(2, _.values[1].intValue());
-    assertEquals("dave", _.strings[1]);
+    }, __);
+    assertEquals("inputfile", __.inputFilename);
+    assertEquals(new File("outputfile"), __.outputFile);
+    assertTrue(__.someoption);
+    assertEquals(10, __.minimum.intValue());
+    assertEquals(3, __.values.length);
+    assertEquals(2, __.values[1].intValue());
+    assertEquals("dave", __.strings[1]);
   }
   @Test public void propertiesViaSetter() {
-    final Object _ = new Object() {
+    final Object __ = new Object() {
       @External(name = "option") public void setHashCode(final int hashCode) {
         this.hashCode = hashCode;
       }
@@ -500,8 +500,8 @@ public class Tester extends Generator {
       }
 
       private static final long serialVersionUID = 1L;
-    }, _);
-    assertEquals(lastInt(), _.hashCode());
+    }, __);
+    assertEquals(lastInt(), __.hashCode());
   }
   @Test public void toProperties() {
     final Properties p = Introspector.toProperties(new Object() {
@@ -521,20 +521,20 @@ public class Tester extends Generator {
   @Test public void toOrderedMapTwoObjects() {
     final Map<String, String> m = Introspector.toOrderedMap(new Object() {
       private int key = 10;
-      @External private final int _1_1 = ++key;
-      @External private final int _1_2 = ++key;
-      @External private final int _1_3 = ++key;
-      @External private final int _1_4 = ++key;
-      @External private final int _1_5 = ++key;
+      @External private final int __1__1 = ++key;
+      @External private final int __1__2 = ++key;
+      @External private final int __1__3 = ++key;
+      @External private final int __1__4 = ++key;
+      @External private final int __1__5 = ++key;
     }, new Object() {
       private int key = 20;
-      @External private final int _2_1 = ++key;
-      @External private final int _2_2 = ++key;
-      @External private final int _2_3 = ++key;
-      @External private final int _2_4 = ++key;
-      @External private final int _2_5 = ++key;
+      @External private final int __2__1 = ++key;
+      @External private final int __2__2 = ++key;
+      @External private final int __2__3 = ++key;
+      @External private final int __2__4 = ++key;
+      @External private final int __2__5 = ++key;
     });
-    assertEquals("[_1_1, _1_2, _1_3, _1_4, _1_5, _2_1, _2_2, _2_3, _2_4, _2_5]", m.keySet().toString());
+    assertEquals("[__1__1, __1__2, __1__3, __1__4, __1__5, __2__1, __2__2, __2__3, __2__4, __2__5]", m.keySet().toString());
     assertEquals("[11, 12, 13, 14, 15, 21, 22, 23, 24, 25]", m.values().toString());
   }
   @Test public void toOrderedDuplicateOptions() {
@@ -578,11 +578,11 @@ public class Tester extends Generator {
     }).get("hashCode"));
   }
   @Test public void ignoreVoidMethods() {
-    abstract class _ {
-      public abstract void __();
+    abstract class __ {
+      public abstract void ____();
     }
-    assertEquals(0, Introspector.toOrderedMap(new _() {
-      @Override @External public final void __() {
+    assertEquals(0, Introspector.toOrderedMap(new __() {
+      @Override @External public final void ____() {
         notify();
       }
     }).size());
@@ -601,29 +601,29 @@ public class Tester extends Generator {
     assertEquals("" + lastInt(), m.get("myName"));
   }
   @Test public void multipleTargets() {
-    class _ {
+    class __ {
       @External int anotherOption = nextInt();
     }
-    final _ _ = new _();
-    extract(args("-option", "EnumB", "-anotherOption", nextIntS()), ClassWithEnumOption.class, _);
+    final __ __ = new __();
+    extract(args("-option", "EnumB", "-anotherOption", nextIntS()), ClassWithEnumOption.class, __);
     assertEquals(EnumType.EnumB, ClassWithEnumOption.option);
-    assertEquals(_.anotherOption, lastInt());
+    assertEquals(__.anotherOption, lastInt());
   }
   @Test public void finalNonStaticIntegerOption() {
-    class _ {
+    class __ {
       @External public final Integer i = new Integer(nextInt());
     }
-    final _ _ = new _();
-    extract(args("-i", nextIntS()), _);
-    assertEquals(lastInt(), _.i.intValue());
+    final __ __ = new __();
+    extract(args("-i", nextIntS()), __);
+    assertEquals(lastInt(), __.i.intValue());
   }
   @Test public void finalStringFieldCannotBeChanged() {
-    class _ {
+    class __ {
       @External private final String s = "final";
     }
-    final _ _ = new _();
-    extract(args("-s", "changed"), _);
-    assertEquals("final", _.s);
+    final __ __ = new __();
+    extract(args("-s", "changed"), __);
+    assertEquals("final", __.s);
   }
   @Test public void manyStaticOptions() {
     extract(args("-input", "inputfile", "-output", "outputfile"), TestCommand4.class);
@@ -655,67 +655,67 @@ public class Tester extends Generator {
   }
   @Test(expected = NonArray.class) public void residueNonArray() {
     extract(args(0), new Object() {
-      @External.Residue File _;
+      @External.Residue File __;
     });
   }
   @Test public void residueSingleField() {
-    class _ {
-      @External.Residue File[] _;
+    class __ {
+      @External.Residue File[] __;
     }
-    final _ _ = new _();
+    final __ __ = new __();
     final int n = 10;
-    extract(args(n), _);
-    assertEquals(n, _._.length);
+    extract(args(n), __);
+    assertEquals(n, __.__.length);
   }
   @Test public void residueMultipleFields() {
-    class _ {
-      @External.Residue File[] _1;
-      @External.Residue File[] _2;
+    class __ {
+      @External.Residue File[] __1;
+      @External.Residue File[] __2;
     }
-    final _ _ = new _();
+    final __ __ = new __();
     final int n = 11;
-    extract(args(n), _);
-    assertEquals(n, _._1.length);
-    assertEquals(n, _._2.length);
+    extract(args(n), __);
+    assertEquals(n, __.__1.length);
+    assertEquals(n, __.__2.length);
   }
 
   static class ResidueStaticField {
-    static @External.Residue File[] _1;
-    static @External.Residue File[] _2;
+    static @External.Residue File[] __1;
+    static @External.Residue File[] __2;
   }
 
   @Test public void residueStaticFields() {
     final int n = 12;
     extract(args(n), ResidueStaticField.class);
-    assertEquals(n, ResidueStaticField._1.length);
-    assertEquals(n, ResidueStaticField._2.length);
+    assertEquals(n, ResidueStaticField.__1.length);
+    assertEquals(n, ResidueStaticField.__2.length);
   }
   @Test public void residueStaticFieldsThroughInstance() {
     final int n = 13;
     extract(args(n), new ResidueStaticField());
-    assertEquals(n, ResidueStaticField._1.length);
-    assertEquals(n, ResidueStaticField._2.length);
+    assertEquals(n, ResidueStaticField.__1.length);
+    assertEquals(n, ResidueStaticField.__2.length);
   }
   @Test public void residueStaticInheritedFieldsThroughInstance() {
     final int n = 14;
-    class _ extends ResidueStaticField {
-      @External.Residue File[] _3;
+    class __ extends ResidueStaticField {
+      @External.Residue File[] __3;
     }
-    final _ _ = new _();
-    extract(args(n), _);
-    assertEquals(n, ResidueStaticField._1.length);
-    assertEquals(n, ResidueStaticField._2.length);
-    assertEquals(n, _._3.length);
+    final __ __ = new __();
+    extract(args(n), __);
+    assertEquals(n, ResidueStaticField.__1.length);
+    assertEquals(n, ResidueStaticField.__2.length);
+    assertEquals(n, __.__3.length);
   }
   @Test public void residueStaticInheritedFieldsThroughInstanceCorrect() {
-    class _ extends ResidueStaticField {
-      @External.Residue File[] _3;
+    class __ extends ResidueStaticField {
+      @External.Residue File[] __3;
     }
-    final _ _ = new _();
-    extract(args("/tmp/a", "hello", ".a"), _);
-    assertEquals(new File("/tmp/a"), ResidueStaticField._1[0]);
-    assertEquals(new File("hello"), ResidueStaticField._2[1]);
-    assertEquals(new File(".a"), _._3[2]);
+    final __ __ = new __();
+    extract(args("/tmp/a", "hello", ".a"), __);
+    assertEquals(new File("/tmp/a"), ResidueStaticField.__1[0]);
+    assertEquals(new File("hello"), ResidueStaticField.__2[1]);
+    assertEquals(new File(".a"), __.__3[2]);
   }
   @Test(expected = InvalidEnumValue.class) //
   public void invalidEnumOption() {
@@ -733,7 +733,7 @@ public class Tester extends Generator {
   }
   @Test(expected = FieldConversionError.class) //
   public void propertiesSetterThrowsException() {
-    final Object _ = new Object() {
+    final Object __ = new Object() {
       @External public void setHashCode(@SuppressWarnings("unused") final int hashCode) {
         throw new RuntimeException();
       }
@@ -750,11 +750,11 @@ public class Tester extends Generator {
       }
 
       private static final long serialVersionUID = 1L;
-    }, _);
+    }, __);
   }
   @Test(expected = FieldConversionError.class) //
   public void argumentsSetterThrowsException() {
-    final Object _ = new Object() {
+    final Object __ = new Object() {
       @External public void setHashCode(@SuppressWarnings("unused") final int hashCode) {
         throw new RuntimeException();
       }
@@ -765,17 +765,17 @@ public class Tester extends Generator {
         return hashCode;
       }
     };
-    extract(args("-hashCode", nextIntS()), _);
+    extract(args("-hashCode", nextIntS()), __);
   }
   @Test public void classWithGetter() {
-    class _ {
+    class __ {
       @External int option = nextInt();
 
       int option() {
         return option;
       }
     }
-    final _ it = new _();
+    final __ it = new __();
     extract(args("-option", "197"), it);
     assertEquals(197, it.option());
   }
@@ -914,26 +914,26 @@ public class Tester extends Generator {
       @External int is;
       @External int the;
       @External int time;
-      @External int for_all;
+      @External int for__all;
       @External int good;
       @External int men;
-    }), matches("(?s).*This.*is.*the.*time.*for_all.*good.*men.*"));
+    }), matches("(?s).*This.*is.*the.*time.*for__all.*good.*men.*"));
   }
 
   @SuppressWarnings("unused") static class ClassWithProperties {
-    @External public void setThis(final int _) {
+    @External public void setThis(final int __) {
       // filler property function
     }
-    @External public void setIs(final int _) {
+    @External public void setIs(final int __) {
       // filler property function
     }
-    @External public void setThe(final int _) {
+    @External public void setThe(final int __) {
       // filler property function
     }
-    @External public void setTime(final int _) {
+    @External public void setTime(final int __) {
       // filler property function
     }
-    @External public void setFor_all(final int for_all) {
+    @External public void setFor__all(final int for__all) {
       // filler property function
     }
     @External public void setGood(final int good) {
@@ -949,7 +949,7 @@ public class Tester extends Generator {
     assertThat(it, containsString("this"));
     assertThat(it, containsString("is"));
     assertThat(it, containsString("time"));
-    assertThat(it, containsString("for_all"));
+    assertThat(it, containsString("for__all"));
     assertThat(it, containsString("good"));
     assertThat(it, containsString("men"));
   }
@@ -971,10 +971,10 @@ public class Tester extends Generator {
       assertThat(usage(ClassWithEnumOption.class), containsString(e.toString()));
   }
   @Test public void usageOrdinaryField() {
-    class _ {
+    class __ {
       @External int a = nextInt();
     }
-    assertThat(usage(new _()), containsString("" + lastInt()));
+    assertThat(usage(new __()), containsString("" + lastInt()));
   }
   @Ignore @Test public void usageStaticFieldValue() {
     assertThat(usage(StaticField.class), containsString("" + lastInt()));
@@ -1073,11 +1073,11 @@ public class Tester extends Generator {
   @Test(expected = ConstructorWithSingleStringArgumentMissing.class) //
   public void missingStringConstructor() {
     class LocalClass {
-      @SuppressWarnings("unused") private final int _;
+      @SuppressWarnings("unused") private final int __;
 
       /** This is not really a string constructor since it is an inner class */
       @SuppressWarnings("unused") LocalClass(final String a) {
-        _ = a.hashCode();
+        __ = a.hashCode();
       }
     }
     extract(args("-option", nextIntS()), new Object() {
@@ -1093,7 +1093,7 @@ public class Tester extends Generator {
     extract(args("blah", "-option"), new Object() {
       @External public int option;
 
-      @SuppressWarnings("unused") public String __() {
+      @SuppressWarnings("unused") public String ____() {
         return "" + option;
       }
     });
@@ -1113,7 +1113,7 @@ public class Tester extends Generator {
   }
   @Test public void usageBoolean() {
     assertThat(usage(new Object() {
-      @External boolean _;
+      @External boolean __;
     }), containsString("flag"));
   }
   @Test public void usageProperty() {
@@ -1283,7 +1283,7 @@ public class Tester extends Generator {
     @External static Integer num = new Integer(new Tester().lastInt());
 
     @Test public void lastIntInInnerStaticClass() {
-      assertEquals(FIRST_LASTINT_VALUE, num.intValue());
+      assertEquals(FIRST__LASTINT__VALUE, num.intValue());
     }
   }
 
