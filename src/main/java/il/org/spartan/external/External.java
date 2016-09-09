@@ -1,9 +1,13 @@
 /**
  * Copyright (c) 2005, Sam Pullara. All Rights Reserved. You may modify and
- * redistribute as long as this attribution remains. <p> Modernized and polished
- * by Yossi Gil yogi@cs.technion.ac.il, 2011. פרופ' יוסי גיל (c) <p> Original
- * copyright remains. Original version can be found <a
- * href=http://code.google.com/p/cli-parser/>here</a>. <p>
+ * redistribute as long as this attribution remains.
+ * <p>
+ * Modernized and polished by Yossi Gil yogi@cs.technion.ac.il, 2011. פרופ' יוסי
+ * גיל (c)
+ * <p>
+ * Original copyright remains. Original version can be found <a
+ * href=http://code.google.com/p/cli-parser/>here</a>.
+ * <p>
  */
 package il.org.spartan.external;
 
@@ -33,13 +37,15 @@ import java.util.Set;
 /**
  * Annotation for <code><b>static</b></code> and non-<code><b>static</b></code>
  * data members whose value can be set, externally, i.e., not by usual
- * initialization or via a setter, but from command line arguments. <p> The
- * value of such an annotated field can be extracted from the command line
+ * initialization or via a setter, but from command line arguments.
+ * <p>
+ * The value of such an annotated field can be extracted from the command line
  * arguments by invoking function
  * {@link Introspector#extract(String[], Object...)} or function
  * {@link Introspector#extract(List, Object...)}. The value can also be
  * extracted from @link{java.util.Properties} by means of
- * {@link Introspector#extract(Properties, Object...)}. <p>
+ * {@link Introspector#extract(Properties, Object...)}.
+ * <p>
  *
  * @author Sam Pullara.
  * @author Yossi Gil {@literal <yogi@cs.technion.ac.il>}
@@ -85,10 +91,11 @@ public @interface External {
    * as {@link External}. Thus, a call to function
    * {@link Introspector#extract(String[], Object...)} (or function
    * {@link Introspector#extract(List, Object...)} for this matter), will
-   * initialize any data member marked as {@link Residue} with the
-   * residual arguments, i.e., those which were not options. <p> As usual, the
-   * array component type must must have a constructor which takes a single
-   * {@link String} argument.
+   * initialize any data member marked as {@link Residue} with the residual
+   * arguments, i.e., those which were not options.
+   * <p>
+   * As usual, the array component type must must have a constructor which takes
+   * a single {@link String} argument.
    *
    * @author Yossi Gil
    * @since 2011-08-20
@@ -105,46 +112,44 @@ public @interface External {
      * Parse a set of arguments and populate the target with the appropriate
      * values.
      *
-     * @param args
-     *          The arguments you want to parse and populate
-     * @param targets
-     *          An array of items, each being an instance or a class object, in
-     *          which {@link External} specifications are to be found. The first
-     *          element is interpreted also as the specifier of the main class.
+     * @param args The arguments you want to parse and populate
+     * @param targets An array of items, each being an instance or a class
+     *          object, in which {@link External} specifications are to be
+     *          found. The first element is interpreted also as the specifier of
+     *          the main class.
      * @return The list of arguments that were not consumed
-     * @throws Introspector.Argument.ParsingError
-     *           in case the command line arguments could not be parsed
-     *           successfully, i.e., user provided incorrect input.
-     * @throws Introspector.Argument.ReflectionError
-     *           in case the extracted value could not be injected into the its
-     *           targets, which is typically a result of misuse of this package,
-     *           e.g., applying an {@link External} annotation to a
-     *           <code><b>final</b></code> field.
+     * @throws Introspector.Argument.ParsingError in case the command line
+     *           arguments could not be parsed successfully, i.e., user provided
+     *           incorrect input.
+     * @throws Introspector.Argument.ReflectionError in case the extracted value
+     *           could not be injected into the its targets, which is typically
+     *           a result of misuse of this package, e.g., applying an
+     *           {@link External} annotation to a <code><b>final</b></code>
+     *           field.
      */
     public static List<String> extract(final String[] args, final Object... targets) {
       return extract(cloneAsList(args), targets);
     }
     /**
-     * Extract <code>&lt;keyword,value&gt;</code> pairs from a list of arguments, as specified by
-     * the {@link External} decorated fields of given object; set these fields,
-     * and return the remaining arguments
+     * Extract <code>&lt;keyword,value&gt;</code> pairs from a list of
+     * arguments, as specified by the {@link External} decorated fields of given
+     * object; set these fields, and return the remaining arguments
      *
-     * @param arguments
-     *          command line arguments
-     * @param targets
-     *          An array of items, each being an instance or a class object, in
-     *          which {@link External} specifications are to be found. The first
-     *          element is interpreted also as the specifier of the main class.
-     * @return the command line arguments, where the <code>&lt;keyword,value&gt;</code> pairs are
-     *         removed.
-     * @throws Introspector.Argument.ParsingError
-     *           in case the command line arguments could not be parsed
-     *           successfully, i.e., user provided incorrect input.
-     * @throws Introspector.Argument.ReflectionError
-     *           in case the extracted value could not be injected into the its
-     *           targets, which is typically a result of misuse of this package,
-     *           e.g., applying an {@link External} annotation to a
-     *           <code><b>final</b></code> field.
+     * @param arguments command line arguments
+     * @param targets An array of items, each being an instance or a class
+     *          object, in which {@link External} specifications are to be
+     *          found. The first element is interpreted also as the specifier of
+     *          the main class.
+     * @return the command line arguments, where the
+     *         <code>&lt;keyword,value&gt;</code> pairs are removed.
+     * @throws Introspector.Argument.ParsingError in case the command line
+     *           arguments could not be parsed successfully, i.e., user provided
+     *           incorrect input.
+     * @throws Introspector.Argument.ReflectionError in case the extracted value
+     *           could not be injected into the its targets, which is typically
+     *           a result of misuse of this package, e.g., applying an
+     *           {@link External} annotation to a <code><b>final</b></code>
+     *           field.
      */
     public static List<String> extract(final List<String> arguments, final Object... targets) {
       final List<String> $ = new Introspector().extractInto(arguments, targets);
@@ -154,10 +159,10 @@ public @interface External {
     /**
      * Generate usage information based on annotations.
      *
-     * @param targets
-     *          An array of items, each being an instance or a class object, in
-     *          which {@link External} specifications are to be found. The first
-     *          element is interpreted also as the specifier of the main class.
+     * @param targets An array of items, each being an instance or a class
+     *          object, in which {@link External} specifications are to be
+     *          found. The first element is interpreted also as the specifier of
+     *          the main class.
      * @return Usage string
      */
     public static String usage(final Object... targets) {
@@ -166,14 +171,12 @@ public @interface External {
     /**
      * Generate usage information based on the target annotations.
      *
-     * @param main
-     *          an instance or a class object, specifying the main class, from
-     *          which the application is invoked.
-     * @param usage
-     *          additional usage information
-     * @param targets
-     *          An array of items, each being an instance or a class object, in
-     *          which {@link External} specifications are to be found.
+     * @param main an instance or a class object, specifying the main class,
+     *          from which the application is invoked.
+     * @param usage additional usage information
+     * @param targets An array of items, each being an instance or a class
+     *          object, in which {@link External} specifications are to be
+     *          found.
      * @return Usage string
      */
     public static String usage(final Object main, final String usage, final Object... targets) {
@@ -185,13 +188,12 @@ public @interface External {
     /**
      * Generate usage information based on the target annotations.
      *
-     * @param usage
-     *          additional usage information, usually pertaining to the
+     * @param usage additional usage information, usually pertaining to the
      *          non-options
-     * @param targets
-     *          An array of items, each being an instance or a class object, in
-     *          which {@link External} specifications are to be found. The first
-     *          element is interpreted also as the specifier of the main class.
+     * @param targets An array of items, each being an instance or a class
+     *          object, in which {@link External} specifications are to be
+     *          found. The first element is interpreted also as the specifier of
+     *          the main class.
      * @return Usage string
      */
     public static String usage(final String usage, final Object... targets) {
@@ -201,10 +203,10 @@ public @interface External {
      * Prints to the standard error stream usage information text based on the
      * target annotations, and abort.
      *
-     * @param targets
-     *          An array of items, each being an instance or a class object, in
-     *          which {@link External} specifications are to be found. The first
-     *          element is interpreted also as the specifier of the main class.
+     * @param targets An array of items, each being an instance or a class
+     *          object, in which {@link External} specifications are to be
+     *          found. The first element is interpreted also as the specifier of
+     *          the main class.
      */
     public static void usageErrorExit(final Object... targets) {
       usageErrorExit("", targets);
@@ -213,12 +215,11 @@ public @interface External {
      * Prints to the standard error stream a usage information text based on the
      * target annotations, and abort.
      *
-     * @param usage
-     *          additional usage information
-     * @param targets
-     *          An array of items, each being an instance or a class object, in
-     *          which {@link External} specifications are to be found. The first
-     *          element is interpreted also as the specifier of the main class.
+     * @param usage additional usage information
+     * @param targets An array of items, each being an instance or a class
+     *          object, in which {@link External} specifications are to be
+     *          found. The first element is interpreted also as the specifier of
+     *          the main class.
      */
     public static void usageErrorExit(final String usage, final Object... targets) {
       System.err.print(usage(usage, targets));
@@ -230,10 +231,10 @@ public @interface External {
      * set objects is formatted as its short class name, followed by tab
      * indented lines, each in a key=value form.
      *
-     * @param targets
-     *          An array of items, each being an instance or a class object, in
-     *          which {@link External} specifications are to be found. The first
-     *          element is interpreted also as the specifier of the main class.
+     * @param targets An array of items, each being an instance or a class
+     *          object, in which {@link External} specifications are to be
+     *          found. The first element is interpreted also as the specifier of
+     *          the main class.
      * @return a pretty print string describing the current settings of the
      *         parameter.
      */
@@ -247,13 +248,14 @@ public @interface External {
       return $.toString();
     }
     /**
-     * Convert the settings in the parameter as a set of <code>&lt;String, String&gt;</code>
-     * entries, in the order that they were defined.
+     * Convert the settings in the parameter as a set of
+     * <code>&lt;String, String&gt;</code> entries, in the order that they were
+     * defined.
      *
-     * @param targets
-     *          An array of items, each being an instance or a class object, in
-     *          which {@link External} specifications are to be found. The first
-     *          element is interpreted also as the specifier of the main class.
+     * @param targets An array of items, each being an instance or a class
+     *          object, in which {@link External} specifications are to be
+     *          found. The first element is interpreted also as the specifier of
+     *          the main class.
      * @return a {@link Set} of {@link java.util.Map.Entry} objects, each
      *         containing a key,value pair.
      */
@@ -291,10 +293,10 @@ public @interface External {
     /**
      * Convert the settings in the parameter to a {@link Properties} object.
      *
-     * @param targets
-     *          An array of items, each being an instance or a class object, in
-     *          which {@link External} specifications are to be found. The first
-     *          element is interpreted also as the specifier of the main class.
+     * @param targets An array of items, each being an instance or a class
+     *          object, in which {@link External} specifications are to be
+     *          found. The first element is interpreted also as the specifier of
+     *          the main class.
      * @return a {@link Properties} object with the settings of the parameter.
      */
     public static Properties toProperties(final Object... targets) {
@@ -442,20 +444,19 @@ public @interface External {
      * required properties you must be careful to set them all in the property
      * file.
      *
-     * @param ps
-     *          The properties that contain the arguments
-     * @param targets
-     *          An array of items, each being an instance or a class object, in
-     *          which {@link External} specifications are to be found. The first
-     *          element is interpreted also as the specifier of the main class.
-     * @throws Introspector.Argument.ParsingError
-     *           in case the command line arguments could not be parsed
-     *           successfully, i.e., user provided incorrect input.
-     * @throws Introspector.Argument.ReflectionError
-     *           in case the extracted value could not be injected into the its
-     *           targets, which is typically a result of misuse of this package,
-     *           e.g., applying an {@link External} annotation to a
-     *           <code><b>final</b></code> field.
+     * @param ps The properties that contain the arguments
+     * @param targets An array of items, each being an instance or a class
+     *          object, in which {@link External} specifications are to be
+     *          found. The first element is interpreted also as the specifier of
+     *          the main class.
+     * @throws Introspector.Argument.ParsingError in case the command line
+     *           arguments could not be parsed successfully, i.e., user provided
+     *           incorrect input.
+     * @throws Introspector.Argument.ReflectionError in case the extracted value
+     *           could not be injected into the its targets, which is typically
+     *           a result of misuse of this package, e.g., applying an
+     *           {@link External} annotation to a <code><b>final</b></code>
+     *           field.
      */
     public static void extract(final Properties ps, final Object... targets) {
       new Introspector().extractInto(ps, targets);

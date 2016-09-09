@@ -17,10 +17,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
@@ -68,17 +65,17 @@ public class Tester extends Generator {
     System.setSecurityManager(oldSecurityManager);
   }
   @Test public void byteCheck() {
-    assertTrue(nextByte() != nextByte());
+    assert nextByte() != nextByte();
     final byte __ = nextByte();
     assertEquals(__, lastByte());
   }
   @Test public void shortCheck() {
-    assertTrue(nextShort() != nextShort());
+    assert nextShort() != nextShort();
     final short __ = nextShort();
     assertEquals(__, lastShort());
   }
   @Test public void intCheck() {
-    assertTrue(nextInt() != nextInt());
+    assert nextInt() != nextInt();
     final int __ = nextInt();
     assertEquals(__, lastInt());
   }
@@ -96,17 +93,17 @@ public class Tester extends Generator {
     assertEquals(FIRST__LASTINT__VALUE, lastInt());
   }
   @Test public void longCheck() {
-    assertTrue(nextLong() != nextLong());
+    assert nextLong() != nextLong();
     final long __ = nextLong();
     assertEquals(__, lastLong());
   }
   @Test public void floatCheck() {
-    assertTrue(nextFloat() != nextFloat());
+    assert nextFloat() != nextFloat();
     final float __ = nextFloat();
     assertEquals(__, lastFloat(), 1E-8);
   }
   @Test public void doubleCheck() {
-    assertTrue(nextDouble() != nextDouble());
+    assert nextDouble() != nextDouble();
     final double __ = nextDouble();
     assertEquals(__, lastDouble(), 1E-15);
   }
@@ -335,8 +332,8 @@ public class Tester extends Generator {
         "-key", "keyValue" //
     ), RequiredStaticFields.class);
     assertEquals(0, leftOver.size());
-    assertNotNull(RequiredStaticFields.key);
-    assertNotNull(RequiredStaticFields.output);
+    assert null !=RequiredStaticFields.key;
+    assert null !=RequiredStaticFields.output;
     assertEquals("outputValue", RequiredStaticFields.output);
     assertEquals("keyValue", RequiredStaticFields.key);
   }
@@ -411,8 +408,8 @@ public class Tester extends Generator {
     ), __);
     assertEquals("inputfile", __.getOption());
     assertEquals(new File("outputfile"), __.getOutputFile());
-    assertFalse(__.isSomeotheroption());
-    assertTrue(__.isSomeoption());
+    assert ! __.isSomeotheroption();
+    assert __.isSomeoption();
     assertEquals(10, __.getMinimum().intValue());
     assertEquals(3, __.getValues().length);
     assertEquals(1, __.getValues()[0].intValue());
@@ -453,7 +450,7 @@ public class Tester extends Generator {
     ), tc);
     assertEquals("inputfile", tc.inputFilename);
     assertEquals(new File("outputfile"), tc.outputFile);
-    assertTrue(tc.someoption);
+    assert tc.someoption;
     assertEquals(10, tc.minimum.intValue());
     assertEquals(3, tc.values.length);
     assertEquals(2, tc.values[1].intValue());
@@ -476,7 +473,7 @@ public class Tester extends Generator {
     }, __);
     assertEquals("inputfile", __.inputFilename);
     assertEquals(new File("outputfile"), __.outputFile);
-    assertTrue(__.someoption);
+    assert __.someoption;
     assertEquals(10, __.minimum.intValue());
     assertEquals(3, __.values.length);
     assertEquals(2, __.values[1].intValue());
@@ -516,7 +513,7 @@ public class Tester extends Generator {
   }
   @Test public void toOrderedMapNoObjects() {
     final Map<String, String> s = Introspector.toOrderedMap();
-    assertNotNull(s);
+    assert null !=s;
   }
   @Test public void toOrderedMapTwoObjects() {
     final Map<String, String> m = Introspector.toOrderedMap(new Object() {
@@ -597,7 +594,7 @@ public class Tester extends Generator {
     });
     assertEquals(1, m.size());
     assertNull(m.get("badName"));
-    assertNotNull(m.get("myName"));
+    assert null !=m.get("myName");
     assertEquals("" + lastInt(), m.get("myName"));
   }
   @Test public void multipleTargets() {
@@ -648,7 +645,7 @@ public class Tester extends Generator {
     assertEquals(0, extra.size());
     assertEquals("inputfile", tc.getInputFilename());
     assertEquals(new File("outputfile"), tc.getOutputFile());
-    assertTrue(tc.isSomeoption());
+    assert tc.isSomeoption();
     assertEquals(10, tc.getMinimum().intValue());
     assertEquals(3, tc.getValues().length);
     assertEquals(2, tc.getValues()[1].intValue());
@@ -815,8 +812,8 @@ public class Tester extends Generator {
         "-key", "keyValue", //
         "-inheritedkey", "inheritedKeyValue"), InhertingFromRequiredFields.class);
     assertEquals(0, leftOver.size());
-    assertNotNull(RequiredStaticFields.key);
-    assertNotNull(RequiredStaticFields.output);
+    assert null !=RequiredStaticFields.key;
+    assert null !=RequiredStaticFields.output;
     assertEquals("outputValue", RequiredStaticFields.output);
     assertEquals("keyValue", RequiredStaticFields.key);
     assertEquals("inheritedKeyValue", InhertingFromRequiredFields.inheritedkey);
@@ -1012,13 +1009,13 @@ public class Tester extends Generator {
     assertThat(s, containsString("-input"));
   }
   @Test public void usageCorrectOrder() {
-    assertTrue(usage(new Object() {
+    assert usage(new Object() {
       @External int AAA;
       @External int BBB;
       @External int CCC;
       @External int DDD;
       @External int EEE;
-    }).matches("(?s).*AAA.*BBB.*CCC.*DDD.*EEE.*"));
+    }).matches("(?s).*AAA.*BBB.*CCC.*DDD.*EEE.*");
   }
   @Test public void usagePrivateField() {
     assertThat(usage(PrivateStaticField.class), containsString("optionNamePrivateStaticField"));
