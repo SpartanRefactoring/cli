@@ -112,7 +112,7 @@ public class Tester extends Generator {
       @External public byte option = nextByte();
     }
     final __ it = new __();
-    extract(args("-option", "" + nextByte()), it);
+    extract(args("-option", nextByte() + ""), it);
     assertEquals(lastByte(), it.option);
   }
   @Test public void shortOption() {
@@ -120,7 +120,7 @@ public class Tester extends Generator {
       @External public short s = nextShort();
     }
     final ShortOption s = new ShortOption();
-    extract(args("-s", "" + nextShort()), s);
+    extract(args("-s", nextShort() + ""), s);
     assertEquals(lastShort(), s.s);
   }
   @Test public void intOption() {
@@ -148,7 +148,7 @@ public class Tester extends Generator {
       @External public float f = nextFloat();
     }
     final __ __ = new __();
-    extract(args("-f", "" + nextFloat()), __);
+    extract(args("-f", nextFloat() + ""), __);
     assertEquals(lastFloat(), __.f, 1E-5);
   }
   @Test public void doubleOption() {
@@ -156,7 +156,7 @@ public class Tester extends Generator {
       @External public double d = nextDouble();
     }
     final DoubleOption d = new DoubleOption();
-    extract(args("-d", "" + nextDouble()), d);
+    extract(args("-d", nextDouble() + ""), d);
     assertEquals(lastDouble(), d.d, 1E-8);
   }
   @Test public void integerOption() {
@@ -311,7 +311,7 @@ public class Tester extends Generator {
   }
 
   static class StaticPrivateField {
-    @External static private Integer num = new Integer(173);
+    @External private static Integer num = new Integer(173);
 
     public static Integer getNum() {
       return num;
@@ -332,8 +332,8 @@ public class Tester extends Generator {
         "-key", "keyValue" //
     ), RequiredStaticFields.class);
     assertEquals(0, leftOver.size());
-    assert null !=RequiredStaticFields.key;
-    assert null !=RequiredStaticFields.output;
+    assert RequiredStaticFields.key != null;
+    assert RequiredStaticFields.output != null;
     assertEquals("outputValue", RequiredStaticFields.output);
     assertEquals("keyValue", RequiredStaticFields.key);
   }
@@ -367,11 +367,11 @@ public class Tester extends Generator {
       public boolean isSomeoption() {
         return someoption;
       }
-      @External(value = "This option can optionally be set") //
+      @External("This option can optionally be set")
       public void setSomeoption(final boolean someoption) {
         this.someoption = someoption;
       }
-      @External(value = "This option can optionally be set") //
+      @External("This option can optionally be set")
       public void setSomeotheroption(final boolean someotheroption) {
         this.someotheroption = someotheroption;
       }
@@ -455,12 +455,12 @@ public class Tester extends Generator {
     assertEquals(3, tc.values.length);
     assertEquals(2, tc.values[1].intValue());
     assertEquals("dave", tc.strings[1]);
-    assertEquals("[this, is, the, time, for, all, good, men]", extra.toString());
+    assertEquals("[this, is, the, time, for, all, good, men]", (extra + ""));
   }
   @Test public void properties() {
     final TestCommand __ = new TestCommand();
     extract(new Properties() {
-      private static final long serialVersionUID = 1L;
+      static final long serialVersionUID = 1L;
 
       {
         put("input", "inputfile");
@@ -496,14 +496,14 @@ public class Tester extends Generator {
         put("option", nextIntS());
       }
 
-      private static final long serialVersionUID = 1L;
+      static final long serialVersionUID = 1L;
     }, __);
     assertEquals(lastInt(), __.hashCode());
   }
   @Test public void toProperties() {
     final Properties p = Introspector.toProperties(new Object() {
-      @External private final String key1 = "value1";
-      @SuppressWarnings("unused") private String key2 = "value2";
+      @External final String key1 = "value1";
+      @SuppressWarnings("unused") String key2 = "value2";
 
       @External public void setKey2(final String key2) {
         this.key2 = key2;
@@ -513,45 +513,45 @@ public class Tester extends Generator {
   }
   @Test public void toOrderedMapNoObjects() {
     final Map<String, String> s = Introspector.toOrderedMap();
-    assert null !=s;
+    assert s != null;
   }
   @Test public void toOrderedMapTwoObjects() {
     final Map<String, String> m = Introspector.toOrderedMap(new Object() {
-      private int key = 10;
-      @External private final int __1__1 = ++key;
-      @External private final int __1__2 = ++key;
-      @External private final int __1__3 = ++key;
-      @External private final int __1__4 = ++key;
-      @External private final int __1__5 = ++key;
+      int key = 10;
+      @External final int __1__1 = ++key;
+      @External final int __1__2 = ++key;
+      @External final int __1__3 = ++key;
+      @External final int __1__4 = ++key;
+      @External final int __1__5 = ++key;
     }, new Object() {
-      private int key = 20;
-      @External private final int __2__1 = ++key;
-      @External private final int __2__2 = ++key;
-      @External private final int __2__3 = ++key;
-      @External private final int __2__4 = ++key;
-      @External private final int __2__5 = ++key;
+      int key = 20;
+      @External final int __2__1 = ++key;
+      @External final int __2__2 = ++key;
+      @External final int __2__3 = ++key;
+      @External final int __2__4 = ++key;
+      @External final int __2__5 = ++key;
     });
-    assertEquals("[__1__1, __1__2, __1__3, __1__4, __1__5, __2__1, __2__2, __2__3, __2__4, __2__5]", m.keySet().toString());
-    assertEquals("[11, 12, 13, 14, 15, 21, 22, 23, 24, 25]", m.values().toString());
+    assertEquals("[__1__1, __1__2, __1__3, __1__4, __1__5, __2__1, __2__2, __2__3, __2__4, __2__5]", (m.keySet() + ""));
+    assertEquals("[11, 12, 13, 14, 15, 21, 22, 23, 24, 25]", (m.values() + ""));
   }
   @Test public void toOrderedDuplicateOptions() {
     final Map<String, String> m = Introspector.toOrderedMap(new Object() {
-      @External private final int option = 100;
+      @External final int option = 100;
     }, new Object() {
-      @External private final int option = 200;
+      @External final int option = 200;
     });
-    assertEquals("[option]", m.keySet().toString());
-    assertEquals("[100]", m.values().toString());
+    assertEquals("[option]", (m.keySet() + ""));
+    assertEquals("[100]", (m.values() + ""));
   }
   @Test public void toOrderedMapGetterMethods() {
     final Map<String, String> m = Introspector.toOrderedMap(new Object() {
-      @External private final String method1() {
+      @External String method1() {
         return "value1";
       }
-      @External private final String method2() {
+      @External String method2() {
         return "value2";
       }
-      @External private final String method3() {
+      @External String method3() {
         return "value3";
       }
     });
@@ -562,14 +562,14 @@ public class Tester extends Generator {
   }
   @Test public void useIntMethod() {
     assertEquals(1, Introspector.toOrderedMap(new Object() {
-      @Override @External public final int hashCode() {
+      @Override @External public int hashCode() {
         return 1;
       }
     }).size());
   }
   @Test public void correctIntMethod() {
     assertEquals("122", Introspector.toOrderedMap(new Object() {
-      @Override @External public final int hashCode() {
+      @Override @External public int hashCode() {
         return 122;
       }
     }).get("hashCode"));
@@ -579,23 +579,23 @@ public class Tester extends Generator {
       public abstract void ____();
     }
     assertEquals(0, Introspector.toOrderedMap(new __() {
-      @Override @External public final void ____() {
+      @Override @External public void ____() {
         notify();
       }
     }).size());
   }
   @Test public void correctMethodName() {
     final Map<String, String> m = Introspector.toOrderedMap(new Object() {
-      private final int returnedValue = nextInt();
+      final int returnedValue = nextInt();
 
-      @External(name = "myName") public final int badName() {
+      @External(name = "myName") public int badName() {
         return returnedValue;
       }
     });
     assertEquals(1, m.size());
     assertNull(m.get("badName"));
-    assert null !=m.get("myName");
-    assertEquals("" + lastInt(), m.get("myName"));
+    assert m.get("myName") != null;
+    assertEquals(lastInt() + "", m.get("myName"));
   }
   @Test public void multipleTargets() {
     class __ {
@@ -677,8 +677,8 @@ public class Tester extends Generator {
   }
 
   static class ResidueStaticField {
-    static @External.Residue File[] __1;
-    static @External.Residue File[] __2;
+    @External.Residue static File[] __1;
+    @External.Residue static File[] __2;
   }
 
   @Test public void residueStaticFields() {
@@ -725,13 +725,13 @@ public class Tester extends Generator {
         put("option", nextIntS());
       }
 
-      private static final long serialVersionUID = 1L;
+      static final long serialVersionUID = 1L;
     }, ClassWithEnumOption.class);
   }
   @Test(expected = FieldConversionError.class) //
   public void propertiesSetterThrowsException() {
     final Object __ = new Object() {
-      @External public void setHashCode(@SuppressWarnings("unused") final int hashCode) {
+      @External public void setHashCode(@SuppressWarnings("unused") final int __) {
         throw new RuntimeException();
       }
 
@@ -746,13 +746,13 @@ public class Tester extends Generator {
         put("hashCode", nextIntS());
       }
 
-      private static final long serialVersionUID = 1L;
+      static final long serialVersionUID = 1L;
     }, __);
   }
   @Test(expected = FieldConversionError.class) //
   public void argumentsSetterThrowsException() {
     final Object __ = new Object() {
-      @External public void setHashCode(@SuppressWarnings("unused") final int hashCode) {
+      @External public void setHashCode(@SuppressWarnings("unused") final int __) {
         throw new RuntimeException();
       }
 
@@ -812,8 +812,8 @@ public class Tester extends Generator {
         "-key", "keyValue", //
         "-inheritedkey", "inheritedKeyValue"), InhertingFromRequiredFields.class);
     assertEquals(0, leftOver.size());
-    assert null !=RequiredStaticFields.key;
-    assert null !=RequiredStaticFields.output;
+    assert RequiredStaticFields.key != null;
+    assert RequiredStaticFields.output != null;
     assertEquals("outputValue", RequiredStaticFields.output);
     assertEquals("keyValue", RequiredStaticFields.key);
     assertEquals("inheritedKeyValue", InhertingFromRequiredFields.inheritedkey);
@@ -852,7 +852,7 @@ public class Tester extends Generator {
   }
   @Test public void optionInConstructorSubSubClass() {
     final int oldValue = 173;
-    final int newValue = oldValue * 43 + 19;
+    final int newValue = 43 * oldValue + 19;
     abstract class B0 {
       abstract int option();
       B0(final String[] args) {
@@ -965,16 +965,16 @@ public class Tester extends Generator {
   }
   @Test public void usageEnum() {
     for (final EnumType e : EnumType.values())
-      assertThat(usage(ClassWithEnumOption.class), containsString(e.toString()));
+      assertThat(usage(ClassWithEnumOption.class), containsString((e + "")));
   }
   @Test public void usageOrdinaryField() {
     class __ {
       @External int a = nextInt();
     }
-    assertThat(usage(new __()), containsString("" + lastInt()));
+    assertThat(usage(new __()), containsString(lastInt() + ""));
   }
   @Ignore @Test public void usageStaticFieldValue() {
-    assertThat(usage(StaticField.class), containsString("" + lastInt()));
+    assertThat(usage(StaticField.class), containsString(lastInt() + ""));
   }
   @Test public void usageStaticField() {
     usage(StaticField.class);
@@ -984,23 +984,21 @@ public class Tester extends Generator {
   @Test public void usagePublicStaticField() {
     assertThat(usage(PublicStaticFields.class), containsString("optionNamePublicField"));
     assertThat(usage(PublicStaticFields.class), containsString("stringOption"));
-    assertThat(usage(PublicStaticFields.class), containsString("" + lastInt()));
+    assertThat(usage(PublicStaticFields.class), containsString(lastInt() + ""));
   }
   @Test public void usageValueFieldFoundInDescription() {
     assertThat(usage(new Object() {
-      //
-      public @External("lorem ipsum") int a;
+      @External("lorem ipsum") public int a;
     }), containsString("lorem ipsum"));
   }
   @Test public void usageullDescriptionConcatenatesValueAndDescription() {
     assertThat(usage(new Object() {
-      //
-      public @External(value = "lorem ip", description = "sum") int a;
+      @External(value = "lorem ip", description = "sum") public int a;
     }), containsString("lorem ipsum"));
   }
   @Test public void usageProperties() {
     final String s = usage(new Object() {
-      @SuppressWarnings("unused") private String input = "inputValue";
+      @SuppressWarnings("unused") String input = "inputValue";
 
       @External public void setInput(final String input) {
         this.input = input;
@@ -1034,7 +1032,7 @@ public class Tester extends Generator {
   private static class PrivateStaticFinalIntField {
     private static final int option = new Tester().lastInt();
 
-    public static final int option() {
+    public static int option() {
       return option;
     }
   }
@@ -1091,7 +1089,7 @@ public class Tester extends Generator {
       @External public int option;
 
       @SuppressWarnings("unused") public String ____() {
-        return "" + option;
+        return option + "";
       }
     });
   }
@@ -1127,7 +1125,7 @@ public class Tester extends Generator {
   }
   @Test public void usagePropertyValue() {
     assertThat(usage(new Object() {
-      private String option = "myValue";
+      String option = "myValue";
 
       @SuppressWarnings("unused") public String getOption() {
         return option;
@@ -1139,9 +1137,9 @@ public class Tester extends Generator {
   }
   @Test public void usagePropertyReadThrowsException() {
     final String usage = usage(new Object() {
-      @External private final String firstOption = "firstValue";
-      @SuppressWarnings("unused") private String option = "myValue";
-      @External private final String secondOption = "secondValue";
+      @External final String firstOption = "firstValue";
+      @SuppressWarnings("unused") String option = "myValue";
+      @External final String secondOption = "secondValue";
 
       @SuppressWarnings("unused") public String getOption() {
         throw new RuntimeException();
@@ -1188,16 +1186,16 @@ public class Tester extends Generator {
       oldSecurityManager = System.getSecurityManager();
       this.expectedStatus = expectedStatus;
     }
-    @Override public void checkPermission(final Permission perm) {
+    @Override public void checkPermission(final Permission p) {
       // allow anything.
     }
-    @Override public void checkPermission(final Permission perm, final Object context) {
+    @Override public void checkPermission(final Permission p, final Object context) {
       // allow anything.
     }
     @Override public void checkExit(final int status) {
       super.checkExit(status);
       System.setSecurityManager(oldSecurityManager);
-      throw expectedStatus == status ? new SecurityException() : new RuntimeException();
+      throw expectedStatus != status ? new RuntimeException() : new SecurityException();
     }
   }
 
@@ -1242,7 +1240,7 @@ public class Tester extends Generator {
 
   private static class PublicStaticFields {
     @External public static Date optionNamePublicField = new Date();
-    @External public static String stringOption = "" + new Tester().lastInt();
+    @External public static String stringOption = new Tester().lastInt() + "";
   }
 
   private static class ExceptionThrowingInitializationOfField extends Tester {
@@ -1251,7 +1249,7 @@ public class Tester extends Generator {
     private static int exceptionThrowing() {
       int $ = 0;
       final Random r = new Random();
-      for (int i = 100; i >= 0; i--)
+      for (int i = 100; i >= 0; --i)
         $ ^= r.nextInt() % i;
       return $;
     }
@@ -1291,11 +1289,11 @@ public class Tester extends Generator {
   static class TestCommand {
     @External(name = "input", value = "This is the input file", required = true) String inputFilename;
     @External(name = "output", alias = "o", value = "This is the output file", required = true) File outputFile;
-    @External(value = "This option can optionally be set") boolean someoption;
+    @External("This option can optionally be set") boolean someoption;
     @External(value = "Minimum", alias = "m") Integer minimum;
     @External(value = "List of values", delimiter = ":") Integer[] values;
     @External(value = "List of strings", delimiter = ";") String[] strings;
-    @External(value = "not required") public boolean notRequired;
+    @External("not required") public boolean notRequired;
   }
 
   static class TestCommand2 {
@@ -1322,7 +1320,7 @@ public class Tester extends Generator {
     public boolean isSomeoption() {
       return someoption;
     }
-    @External(value = "This option can optionally be set") //
+    @External("This option can optionally be set")
     public void setSomeoption(final boolean someoption) {
       this.someoption = someoption;
     }
@@ -1343,7 +1341,7 @@ public class Tester extends Generator {
   }
 
   static class TestCommand4 {
-    @External() static String input;
+    @External static String input;
     @External(required = true) static String output;
   }
 
@@ -1352,7 +1350,7 @@ public class Tester extends Generator {
   }
   private String[] args(final int n) {
     final String[] $ = new String[n];
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < n; ++i)
       $[i] = "N" + nextLong();
     return $;
   }
@@ -1372,7 +1370,7 @@ class Generator {
     return lastInt = inner.nextInt();
   }
   public String nextIntS() {
-    return "" + nextInt();
+    return nextInt() + "";
   }
   public float nextFloat() {
     return lastFloat = inner.nextFloat();
@@ -1425,8 +1423,8 @@ class RegexMatcher extends BaseMatcher<String> {
   @Override public boolean matches(final Object o) {
     return ((String) o).matches(regex);
   }
-  @Override public void describeTo(final Description description) {
-    description.appendText("matches regex=");
+  @Override public void describeTo(final Description d) {
+    d.appendText("matches regex=");
   }
   public static RegexMatcher matches(final String regex) {
     return new RegexMatcher(regex);

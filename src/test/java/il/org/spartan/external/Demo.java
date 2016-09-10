@@ -36,7 +36,7 @@ public class Demo extends Base {
   // Enum field
   @External(required = true) private Gender gender;
   // Array field
-  @External(value = "comma separated list of skills") //
+  @External("comma separated list of skills")
   private static String[] skills;
   // Array field with some other delimiter
   @External(value = "colon separated list of files", delimiter = ":") //
@@ -86,14 +86,14 @@ public class Demo extends Base {
     System.out.format("%d remaining arguments injected into a data member of type %s[]:\n", new Integer(os.length),
         os.getClass().getComponentType().getSimpleName());
     System.out.println("===================================================================");
-    for (int i = 0; i < os.length; i++)
+    for (int i = 0; i < os.length; ++i)
       System.out.format("\t %d) '%s'\n", new Integer(i), os[i]);
     System.out.println();
   }
   private static void printRemaining(final List<String> remaining) {
     System.out.format("%d remaining arguments:\n", new Integer(remaining.size()));
     System.out.println("======================");
-    for (int i = 0; i < remaining.size(); i++)
+    for (int i = 0; i < remaining.size(); ++i)
       System.out.format("\t %d) '%s'\n", new Integer(i), remaining.get(i));
     System.out.println();
   }
