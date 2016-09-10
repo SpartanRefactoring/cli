@@ -455,7 +455,7 @@ public class Tester extends Generator {
     assertEquals(3, tc.values.length);
     assertEquals(2, tc.values[1].intValue());
     assertEquals("dave", tc.strings[1]);
-    assertEquals("[this, is, the, time, for, all, good, men]", (extra + ""));
+    assertEquals("[this, is, the, time, for, all, good, men]", extra + "");
   }
   @Test public void properties() {
     final TestCommand __ = new TestCommand();
@@ -531,8 +531,8 @@ public class Tester extends Generator {
       @External final int __2__4 = ++key;
       @External final int __2__5 = ++key;
     });
-    assertEquals("[__1__1, __1__2, __1__3, __1__4, __1__5, __2__1, __2__2, __2__3, __2__4, __2__5]", (m.keySet() + ""));
-    assertEquals("[11, 12, 13, 14, 15, 21, 22, 23, 24, 25]", (m.values() + ""));
+    assertEquals("[__1__1, __1__2, __1__3, __1__4, __1__5, __2__1, __2__2, __2__3, __2__4, __2__5]", m.keySet() + "");
+    assertEquals("[11, 12, 13, 14, 15, 21, 22, 23, 24, 25]", m.values() + "");
   }
   @Test public void toOrderedDuplicateOptions() {
     final Map<String, String> m = Introspector.toOrderedMap(new Object() {
@@ -540,8 +540,8 @@ public class Tester extends Generator {
     }, new Object() {
       @External final int option = 200;
     });
-    assertEquals("[option]", (m.keySet() + ""));
-    assertEquals("[100]", (m.values() + ""));
+    assertEquals("[option]", m.keySet() + "");
+    assertEquals("[100]", m.values() + "");
   }
   @Test public void toOrderedMapGetterMethods() {
     final Map<String, String> m = Introspector.toOrderedMap(new Object() {
@@ -731,8 +731,8 @@ public class Tester extends Generator {
   @Test(expected = FieldConversionError.class) //
   public void propertiesSetterThrowsException() {
     final Object __ = new Object() {
-      @External public void setHashCode(@SuppressWarnings("unused") final int __) {
-        throw new RuntimeException();
+      @External public void setHashCode(final int hashCode) {
+        throw new RuntimeException("" + hashCode);
       }
 
       int hashCode = nextInt();
@@ -752,8 +752,8 @@ public class Tester extends Generator {
   @Test(expected = FieldConversionError.class) //
   public void argumentsSetterThrowsException() {
     final Object __ = new Object() {
-      @External public void setHashCode(@SuppressWarnings("unused") final int __) {
-        throw new RuntimeException();
+      @External public void setHashCode(final int hashCode) {
+        throw new RuntimeException(hashCode + "");
       }
 
       int hashCode = nextInt();
@@ -965,7 +965,7 @@ public class Tester extends Generator {
   }
   @Test public void usageEnum() {
     for (final EnumType e : EnumType.values())
-      assertThat(usage(ClassWithEnumOption.class), containsString((e + "")));
+      assertThat(usage(ClassWithEnumOption.class), containsString(e + ""));
   }
   @Test public void usageOrdinaryField() {
     class __ {
