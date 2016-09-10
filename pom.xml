@@ -3,7 +3,7 @@
   <groupId>il.org.spartan</groupId>
   <artifactId>cli</artifactId>
   <packaging>jar</packaging>
-  <version>1.0</version>
+  <version>1.01</version>
 
   <name>Spartan CLI</name>
   <description>A command line interface processor</description>
