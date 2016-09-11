@@ -340,7 +340,7 @@ public @interface External {
           b.append(usage(target, f));
         for (final PropertyDescriptor pd : descriptors(c))
           b.append(usage(target, pd));
-      } catch (final Error __) {
+      } catch (final Error ____) {
         // No point in treating any errors while collecting usage
         // information
       }
@@ -406,7 +406,7 @@ public @interface External {
     private static PropertyDescriptor[] descriptors(final Class<? extends Object> c) {
       try {
         return java.beans.Introspector.getBeanInfo(c).getPropertyDescriptors();
-      } catch (final IntrospectionException __) { // Ignore errors of this
+      } catch (final IntrospectionException ____) { // Ignore errors of this
         // sort
         return new PropertyDescriptor[0];
       }
