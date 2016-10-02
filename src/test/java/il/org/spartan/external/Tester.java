@@ -1,30 +1,53 @@
 /**
  * Copyright (c) 2005, Sam Pullara. All Rights Reserved. You may modify and
- * redistribute as long as this attribution remains.
- * <p>
- * Modernized and polished by Yossi Gil yogi@cs.technion.ac.il, 2011. Original
- * copyright remains. Original version can be found <a
+ * redistribute as long as this attribution remains. <p> Modernized and polished
+ * by Yossi Gil yogi@cs.technion.ac.il, 2011. Original copyright remains.
+ * Original version can be found <a
  * href=http://code.google.com/p/cli-parser/>here</a>.
  */
 package il.org.spartan.external;
 
-import static il.org.spartan.external.External.Introspector.*;
-import static il.org.spartan.external.RegexMatcher.*;
-import static org.hamcrest.CoreMatchers.*;
+
+import static il.org.spartan.external.External.Introspector.extract;
+import static il.org.spartan.external.External.Introspector.settings;
+import static il.org.spartan.external.External.Introspector.usage;
+import static il.org.spartan.external.External.Introspector.usageErrorExit;
+import static il.org.spartan.external.RegexMatcher.matches;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNot.not;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
-import java.io.*;
-import java.security.*;
-import java.util.*;
+import java.io.File;
+import java.security.Permission;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Random;
 
-import org.hamcrest.*;
-import org.junit.*;
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 
-import il.org.spartan.external.External.*;
-import il.org.spartan.external.External.Introspector.*;
-import il.org.spartan.external.External.Introspector.Argument.*;
+import il.org.spartan.external.External.Introspector;
+import il.org.spartan.external.External.Introspector.Argument.ConstructorWithSingleStringArgumentMissing;
+import il.org.spartan.external.External.Introspector.Argument.DuplicateOption;
+import il.org.spartan.external.External.Introspector.Argument.FieldConversionError;
+import il.org.spartan.external.External.Introspector.Argument.FieldInitializationError;
+import il.org.spartan.external.External.Introspector.Argument.FieldIsFinal;
+import il.org.spartan.external.External.Introspector.Argument.InvalidEnumValue;
+import il.org.spartan.external.External.Introspector.Argument.MissingValueForOption;
+import il.org.spartan.external.External.Introspector.Argument.NumericParsingError;
+import il.org.spartan.external.External.Introspector.Argument.RequiredOption;
+import il.org.spartan.external.External.Introspector.Argument.WrongTarget;
+import il.org.spartan.external.External.Introspector.NonArray;
+import il.org.spartan.external.External.Introspector.UnrecognizedOption;
 
 /**
  * @author: Sam Pullara.
@@ -344,10 +367,12 @@ public class Tester extends Generator {
       public boolean isSomeoption() {
         return someoption;
       }
-      @External("This option can optionally be set") public void setSomeoption(final boolean someoption) {
+      @External("This option can optionally be set")
+      public void setSomeoption(final boolean someoption) {
         this.someoption = someoption;
       }
-      @External("This option can optionally be set") public void setSomeotheroption(final boolean someotheroption) {
+      @External("This option can optionally be set")
+      public void setSomeotheroption(final boolean someotheroption) {
         this.someotheroption = someotheroption;
       }
 
@@ -383,7 +408,7 @@ public class Tester extends Generator {
     ), ____);
     assertEquals("inputfile", ____.getOption());
     assertEquals(new File("outputfile"), ____.getOutputFile());
-    assert !____.isSomeotheroption();
+    assert ! ____.isSomeotheroption();
     assert ____.isSomeoption();
     assertEquals(10, ____.getMinimum().intValue());
     assertEquals(3, ____.getValues().length);
@@ -436,6 +461,7 @@ public class Tester extends Generator {
     final TestCommand ____ = new TestCommand();
     extract(new Properties() {
       static final long serialVersionUID = 1L;
+
       {
         put("input", "inputfile");
         put("o", "outputfile");
@@ -469,6 +495,7 @@ public class Tester extends Generator {
       {
         put("option", nextIntS());
       }
+
       static final long serialVersionUID = 1L;
     }, ____);
     assertEquals(lastInt(), ____.hashCode());
@@ -476,9 +503,10 @@ public class Tester extends Generator {
   @Test public void toProperties() {
     final Properties p = Introspector.toProperties(new Object() {
       @External final String key1 = "value1";
+      @SuppressWarnings("unused") String key2 = "value2";
 
-      @External public void setKey2(@SuppressWarnings("unused") final String key2) {
-        // This block is intentionally left empty for testing purposes
+      @External public void setKey2(final String key2) {
+        this.key2 = key2;
       }
     });
     assertEquals("value1", p.get("key1"));
@@ -503,9 +531,7 @@ public class Tester extends Generator {
       @External final int ____2____4 = ++key;
       @External final int ____2____5 = ++key;
     });
-    assertEquals(
-        "[____1____1, ____1____2, ____1____3, ____1____4, ____1____5, ____2____1, ____2____2, ____2____3, ____2____4, ____2____5]",
-        m.keySet() + "");
+    assertEquals("[____1____1, ____1____2, ____1____3, ____1____4, ____1____5, ____2____1, ____2____2, ____2____3, ____2____4, ____2____5]", m.keySet() + "");
     assertEquals("[11, 12, 13, 14, 15, 21, 22, 23, 24, 25]", m.values() + "");
   }
   @Test public void toOrderedDuplicateOptions() {
@@ -698,6 +724,7 @@ public class Tester extends Generator {
       {
         put("option", nextIntS());
       }
+
       static final long serialVersionUID = 1L;
     }, ClassWithEnumOption.class);
   }
@@ -718,6 +745,7 @@ public class Tester extends Generator {
       {
         put("hashCode", nextIntS());
       }
+
       static final long serialVersionUID = 1L;
     }, ____);
   }
@@ -970,8 +998,10 @@ public class Tester extends Generator {
   }
   @Test public void usageProperties() {
     final String s = usage(new Object() {
-      @External public void setInput(@SuppressWarnings("unused") final String input) {
-        // This block is intentionally left empty for testing purposes
+      @SuppressWarnings("unused") String input = "inputValue";
+
+      @External public void setInput(final String input) {
+        this.input = input;
       }
     });
     assertThat(s, containsString("-input"));
@@ -1038,7 +1068,12 @@ public class Tester extends Generator {
   @Test(expected = ConstructorWithSingleStringArgumentMissing.class) //
   public void missingStringConstructor() {
     class LocalClass {
-      @SuppressWarnings("unused") private final int ____ = 0;
+      @SuppressWarnings("unused") private final int ____;
+
+      /** This is not really a string constructor since it is an inner class */
+      @SuppressWarnings("unused") LocalClass(final String a) {
+        ____ = a.hashCode();
+      }
     }
     extract(args("-option", nextIntS()), new Object() {
       @External public LocalClass option;
@@ -1052,6 +1087,10 @@ public class Tester extends Generator {
   @Test(expected = MissingValueForOption.class) public void missingValue() {
     extract(args("blah", "-option"), new Object() {
       @External public int option;
+
+      @SuppressWarnings("unused") public String ________() {
+        return option + "";
+      }
     });
   }
   @Test(expected = RequiredOption.class) public void missingRequiredOptionProperties() {
@@ -1074,8 +1113,11 @@ public class Tester extends Generator {
   }
   @Test public void usageProperty() {
     assertThat(usage(new Object() {
-      @SuppressWarnings("unused") boolean option;
+      boolean option;
 
+      @SuppressWarnings("unused") public boolean isOption() {
+        return option;
+      }
       @External public void setOption(final boolean option) {
         this.option = option;
       }
@@ -1083,8 +1125,11 @@ public class Tester extends Generator {
   }
   @Test public void usagePropertyValue() {
     assertThat(usage(new Object() {
-      @SuppressWarnings("unused") String option = "myValue";
+      String option = "myValue";
 
+      @SuppressWarnings("unused") public String getOption() {
+        return option;
+      }
       @External public void setOption(final String option) {
         this.option = option;
       }
@@ -1093,10 +1138,14 @@ public class Tester extends Generator {
   @Test public void usagePropertyReadThrowsException() {
     final String usage = usage(new Object() {
       @External final String firstOption = "firstValue";
+      @SuppressWarnings("unused") String option = "myValue";
       @External final String secondOption = "secondValue";
 
-      @External public void setOption(@SuppressWarnings("unused") final String option) {
-        // This block is intentionally left empty for testing purposes
+      @SuppressWarnings("unused") public String getOption() {
+        throw new RuntimeException();
+      }
+      @External public void setOption(final String option) {
+        this.option = option;
       }
     });
     assertThat(usage, containsString("firstOption"));
@@ -1271,7 +1320,8 @@ public class Tester extends Generator {
     public boolean isSomeoption() {
       return someoption;
     }
-    @External("This option can optionally be set") public void setSomeoption(final boolean someoption) {
+    @External("This option can optionally be set")
+    public void setSomeoption(final boolean someoption) {
       this.someoption = someoption;
     }
     public Integer getMinimum() {
@@ -1357,9 +1407,9 @@ class Generator {
 }
 
 /**
- * Borrowed from
- * <a href="http://piotrga.wordpress.com/2009/03/27/hamcrest-regex-matcher/">
- * Piotr Gabryanczyk's blog</a>
+ * Borrowed from <a
+ * href="http://piotrga.wordpress.com/2009/03/27/hamcrest-regex-matcher/"> Piotr
+ * Gabryanczyk's blog</a>
  *
  * @author Yossi Gil
  * @since Nov 2, 2011
