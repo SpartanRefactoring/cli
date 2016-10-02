@@ -1,8 +1,9 @@
 /**
  * Copyright (c) 2005, Sam Pullara. All Rights Reserved. You may modify and
- * redistribute as long as this attribution remains. <p> Modernized and polished
- * by Yossi Gil yogi@cs.technion.ac.il, 2011. Original copyright remains.
- * Original version can be found <a
+` * redistribute as long as this attribution remains.
+ * <p>
+ * Modernized and polished by Yossi Gil yogi@cs.technion.ac.il, 2011. Original
+ * copyright remains. Original version can be found <a
  * href=http://code.google.com/p/cli-parser/>here</a>.
  */
 package il.org.spartan.external;
@@ -18,7 +19,9 @@ import java.util.List;
 
 /**
  * A simple demonstration of the capabilities of use of {@link External} and the
- * extraction of command line arguments. <p> Try running it as follows: <code>
+ * extraction of command line arguments.
+ * <p>
+ * Try running it as follows: <code>
  * java il.ac.technion.cs.ssdl.external.Demo all -gender Female -skills
  * painting,coooking -o /tmp/output.txt -firstName Jane -path
  * /bin:/usr/bin:/usr/sbin these arguments are not processed </code> and examine
@@ -36,8 +39,7 @@ public class Demo extends Base {
   // Enum field
   @External(required = true) private Gender gender;
   // Array field
-  @External("comma separated list of skills")
-  private static String[] skills;
+  @External("comma separated list of skills") private static String[] skills;
   // Array field with some other delimiter
   @External(value = "colon separated list of files", delimiter = ":") //
   private static File[] path;
@@ -48,8 +50,7 @@ public class Demo extends Base {
   /**
    * main function, to which command line arguments are passed.
    *
-   * @param args
-   *          command line arguments
+   * @param args command line arguments
    */
   public static void main(final String[] args) {
     if (args.length == 0)

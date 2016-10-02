@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2005, Sam Pullara. All Rights Reserved. You may modify and
- * redistribute as long as this attribution remains. <p> Modernized and polished
- * by Yossi Gil yogi@cs.technion.ac.il, 2011. Original copyright remains.
- * Original version can be found <a
+ * redistribute as long as this attribution remains.
+ * <p>
+ * Modernized and polished by Yossi Gil yogi@cs.technion.ac.il, 2011. Original
+ * copyright remains. Original version can be found <a
  * href=http://code.google.com/p/cli-parser/>here</a>.
  */
 package il.org.spartan.external;
-
 
 import static il.org.spartan.external.External.Introspector.extract;
 import static il.org.spartan.external.External.Introspector.settings;
@@ -357,12 +357,10 @@ public class Tester extends Generator {
       public boolean isSomeoption() {
         return someoption;
       }
-      @External("This option can optionally be set")
-      public void setSomeoption(final boolean someoption) {
+      @External("This option can optionally be set") public void setSomeoption(final boolean someoption) {
         this.someoption = someoption;
       }
-      @External("This option can optionally be set")
-      public void setSomeotheroption(final boolean someotheroption) {
+      @External("This option can optionally be set") public void setSomeotheroption(final boolean someotheroption) {
         this.someotheroption = someotheroption;
       }
 
@@ -398,7 +396,7 @@ public class Tester extends Generator {
     ), ____);
     assertEquals("inputfile", ____.getOption());
     assertEquals(new File("outputfile"), ____.getOutputFile());
-    assert ! ____.isSomeotheroption();
+    assert !____.isSomeotheroption();
     assert ____.isSomeoption();
     assertEquals(10, ____.getMinimum().intValue());
     assertEquals(3, ____.getValues().length);
@@ -451,7 +449,6 @@ public class Tester extends Generator {
     final TestCommand ____ = new TestCommand();
     extract(new Properties() {
       static final long serialVersionUID = 1L;
-
       {
         put("input", "inputfile");
         put("o", "outputfile");
@@ -485,7 +482,6 @@ public class Tester extends Generator {
       {
         put("option", nextIntS());
       }
-
       static final long serialVersionUID = 1L;
     }, ____);
     assertEquals(lastInt(), ____.hashCode());
@@ -519,7 +515,9 @@ public class Tester extends Generator {
       @External final int ____2____4 = ++key;
       @External final int ____2____5 = ++key;
     });
-    assertEquals("[____1____1, ____1____2, ____1____3, ____1____4, ____1____5, ____2____1, ____2____2, ____2____3, ____2____4, ____2____5]", m.keySet() + "");
+    assertEquals(
+        "[____1____1, ____1____2, ____1____3, ____1____4, ____1____5, ____2____1, ____2____2, ____2____3, ____2____4, ____2____5]",
+        m.keySet() + "");
     assertEquals("[11, 12, 13, 14, 15, 21, 22, 23, 24, 25]", m.values() + "");
   }
   @Test public void toOrderedDuplicateOptions() {
@@ -712,7 +710,6 @@ public class Tester extends Generator {
       {
         put("option", nextIntS());
       }
-
       static final long serialVersionUID = 1L;
     }, ClassWithEnumOption.class);
   }
@@ -1305,8 +1302,7 @@ public class Tester extends Generator {
     public boolean isSomeoption() {
       return someoption;
     }
-    @External("This option can optionally be set")
-    public void setSomeoption(final boolean someoption) {
+    @External("This option can optionally be set") public void setSomeoption(final boolean someoption) {
       this.someoption = someoption;
     }
     public Integer getMinimum() {
@@ -1392,9 +1388,9 @@ class Generator {
 }
 
 /**
- * Borrowed from <a
- * href="http://piotrga.wordpress.com/2009/03/27/hamcrest-regex-matcher/"> Piotr
- * Gabryanczyk's blog</a>
+ * Borrowed from
+ * <a href="http://piotrga.wordpress.com/2009/03/27/hamcrest-regex-matcher/">
+ * Piotr Gabryanczyk's blog</a>
  *
  * @author Yossi Gil
  * @since Nov 2, 2011
