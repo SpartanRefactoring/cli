@@ -1068,7 +1068,10 @@ public class Tester extends Generator {
   @Test(expected = ConstructorWithSingleStringArgumentMissing.class) //
   public void missingStringConstructor() {
     class LocalClass {
-      @SuppressWarnings("unused") private final int ____;
+      @SuppressWarnings("unused") int ____;
+      {
+        ____ = 1;
+      }
 
       /** This is not really a string constructor since it is an inner class */
       @SuppressWarnings("unused") LocalClass(final String a) {
