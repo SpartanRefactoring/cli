@@ -66,46 +66,36 @@ public class Tester extends Generator {
   }
   @Test public void byteCheck() {
     assert nextByte() != nextByte();
-    final byte ____ = nextByte();
-    assertEquals(____, lastByte());
+    assertEquals(nextByte(), lastByte());
   }
   @Test public void shortCheck() {
     assert nextShort() != nextShort();
-    final short ____ = nextShort();
-    assertEquals(____, lastShort());
+    assertEquals(nextShort(), lastShort());
   }
   @Test public void intCheck() {
     assert nextInt() != nextInt();
-    final int ____ = nextInt();
-    assertEquals(____, lastInt());
+    assertEquals(nextInt(), lastInt());
   }
   @Test public void twoLastIntAreIdentical() {
-    final int i1 = new Tester().lastInt();
-    final int i2 = new Tester().lastInt();
-    assertEquals(i1, i2);
+    assertEquals(new Tester().lastInt(), new Tester().lastInt());
   }
   @Test public void myAndOtherLastIntAreIdentical() {
-    final int i1 = lastInt();
-    final int i2 = new Tester().lastInt();
-    assertEquals(i1, i2);
+    assertEquals(lastInt(), new Tester().lastInt());
   }
   @Test public void whatIsMyLastInt() {
     assertEquals(FIRST____LASTINT____VALUE, lastInt());
   }
   @Test public void longCheck() {
     assert nextLong() != nextLong();
-    final long ____ = nextLong();
-    assertEquals(____, lastLong());
+    assertEquals(nextLong(), lastLong());
   }
   @Test public void floatCheck() {
     assert nextFloat() != nextFloat();
-    final float ____ = nextFloat();
-    assertEquals(____, lastFloat(), 1E-8);
+    assertEquals(nextFloat(), lastFloat(), 1E-8);
   }
   @Test public void doubleCheck() {
     assert nextDouble() != nextDouble();
-    final double ____ = nextDouble();
-    assertEquals(____, lastDouble(), 1E-15);
+    assertEquals(nextDouble(), lastDouble(), 1E-15);
   }
   @Test public void byteOption() {
     class ____ {
@@ -161,7 +151,7 @@ public class Tester extends Generator {
   }
   @Test public void integerOption() {
     class option {
-      @External public Integer i = new Integer(nextInt());
+      @External public Integer i = Integer.valueOf(nextInt());
     }
     final option i = new option();
     extract(args("-i", nextIntS()), i);
@@ -181,14 +171,14 @@ public class Tester extends Generator {
   }
   @Test public void integeArrayOption() {
     class option {
-      @External public Integer[] is = { new Integer(nextInt()) };
+      @External public Integer[] is = { Integer.valueOf(nextInt()) };
     }
     final option i = new option();
     extract(args("-is", "1,2,3"), this, i);
     assertEquals(3, i.is.length);
-    assertEquals(new Integer(1), i.is[0]);
-    assertEquals(new Integer(2), i.is[1]);
-    assertEquals(new Integer(3), i.is[2]);
+    assertEquals(Integer.valueOf(1), i.is[0]);
+    assertEquals(Integer.valueOf(2), i.is[1]);
+    assertEquals(Integer.valueOf(3), i.is[2]);
   }
   @Test public void byteArrayOption() {
     class option {
@@ -311,7 +301,7 @@ public class Tester extends Generator {
   }
 
   static class StaticPrivateField {
-    @External private static Integer num = new Integer(173);
+    @External private static Integer num = Integer.valueOf(173);
 
     public static Integer getNum() {
       return num;
@@ -501,19 +491,17 @@ public class Tester extends Generator {
     assertEquals(lastInt(), ____.hashCode());
   }
   @Test public void toProperties() {
-    final Properties p = Introspector.toProperties(new Object() {
+    assertEquals("value1", Introspector.toProperties(new Object() {
       @External final String key1 = "value1";
       @SuppressWarnings("unused") String key2 = "value2";
 
       @External public void setKey2(final String key2) {
         this.key2 = key2;
       }
-    });
-    assertEquals("value1", p.get("key1"));
+    }).get("key1"));
   }
   @Test public void toOrderedMapNoObjects() {
-    final Map<String, String> s = Introspector.toOrderedMap();
-    assert s != null;
+    assert Introspector.toOrderedMap() != null;
   }
   @Test public void toOrderedMapTwoObjects() {
     final Map<String, String> m = Introspector.toOrderedMap(new Object() {
@@ -608,7 +596,7 @@ public class Tester extends Generator {
   }
   @Test public void finalNonStaticIntegerOption() {
     class ____ {
-      @External public final Integer i = new Integer(nextInt());
+      @External public final Integer i = Integer.valueOf(nextInt());
     }
     final ____ ____ = new ____();
     extract(args("-i", nextIntS()), ____);
@@ -730,28 +718,12 @@ public class Tester extends Generator {
   }
   @Test(expected = FieldConversionError.class) //
   public void propertiesSetterThrowsException() {
-    final Object ____ = new Object() {
-      @External public void setHashCode(final int hashCode) {
-        throw new RuntimeException("" + hashCode);
-      }
-
-      int hashCode = nextInt();
-
-      @Override public int hashCode() {
-        return hashCode;
-      }
-    };
     extract(new Properties() {
       {
         put("hashCode", nextIntS());
       }
-
       static final long serialVersionUID = 1L;
-    }, ____);
-  }
-  @Test(expected = FieldConversionError.class) //
-  public void argumentsSetterThrowsException() {
-    final Object ____ = new Object() {
+    }, (new Object() {
       @External public void setHashCode(final int hashCode) {
         throw new RuntimeException(hashCode + "");
       }
@@ -761,8 +733,21 @@ public class Tester extends Generator {
       @Override public int hashCode() {
         return hashCode;
       }
-    };
-    extract(args("-hashCode", nextIntS()), ____);
+    }));
+  }
+  @Test(expected = FieldConversionError.class) //
+  public void argumentsSetterThrowsException() {
+    extract(args("-hashCode", nextIntS()), (new Object() {
+      @External public void setHashCode(final int hashCode) {
+        throw new RuntimeException(hashCode + "");
+      }
+
+      int hashCode = nextInt();
+
+      @Override public int hashCode() {
+        return hashCode;
+      }
+    }));
   }
   @Test public void classWithGetter() {
     class ____ {
@@ -892,9 +877,7 @@ public class Tester extends Generator {
         assertEquals(oldValue, option());
       }
     }
-    final B0 it = new B3(args("-option", newValue + ""));
-    // Annoyingly, the option value does not change.
-    assertEquals(oldValue, it.option());
+    assertEquals(oldValue, (new B3(args("-option", newValue + ""))).option());
   }
   @Test public void settingsContainsKeyValue() {
     final String it = settings(new Object() {
@@ -964,8 +947,8 @@ public class Tester extends Generator {
     assertThat(settings(new This(), new For()), matches("(?s).*This:.*is.*the.*time.*For:.*all.*good.*men.*"));
   }
   @Test public void usageEnum() {
-    for (final EnumType e : EnumType.values())
-      assertThat(usage(ClassWithEnumOption.class), containsString(e + ""));
+    for (final EnumType ¢ : EnumType.values())
+      assertThat(usage(ClassWithEnumOption.class), containsString(¢ + ""));
   }
   @Test public void usageOrdinaryField() {
     class ____ {
@@ -997,14 +980,13 @@ public class Tester extends Generator {
     }), containsString("lorem ipsum"));
   }
   @Test public void usageProperties() {
-    final String s = usage(new Object() {
+    assertThat(usage(new Object() {
       @SuppressWarnings("unused") String input = "inputValue";
 
       @External public void setInput(final String input) {
         this.input = input;
       }
-    });
-    assertThat(s, containsString("-input"));
+    }), containsString("-input"));
   }
   @Test public void usageCorrectOrder() {
     assert usage(new Object() {
@@ -1234,7 +1216,7 @@ public class Tester extends Generator {
   }
 
   static class InhertingFromRequiredFields extends RequiredStaticFields {
-    @External(required = true) static String inheritedkey = null;
+    @External(required = true) static String inheritedkey;
   }
 
   private static class PrivateStaticField {
@@ -1252,8 +1234,8 @@ public class Tester extends Generator {
     private static int exceptionThrowing() {
       int $ = 0;
       final Random r = new Random();
-      for (int i = 100; i >= 0; --i)
-        $ ^= r.nextInt() % i;
+      for (int ¢ = 100; ¢ >= 0; --¢)
+        $ ^= r.nextInt() % ¢;
       return $;
     }
   }
@@ -1265,7 +1247,7 @@ public class Tester extends Generator {
   }
 
   static class RequiredStaticFields {
-    @External(required = true) static String key = null;
+    @External(required = true) static String key;
     @External(required = true) static String output;
   }
 
@@ -1278,7 +1260,7 @@ public class Tester extends Generator {
   }
 
   static class StaticField {
-    @External static Integer num = new Integer(new Tester().lastInt());
+    @External static Integer num = Integer.valueOf(new Tester().lastInt());
 
     @Test public void lastIntInInnerStaticClass() {
       assertEquals(FIRST____LASTINT____VALUE, num.intValue());
@@ -1286,7 +1268,7 @@ public class Tester extends Generator {
   }
 
   static class StaticFinalField {
-    @External static final Integer num = new Integer(173);
+    @External static final Integer num = Integer.valueOf(173);
   }
 
   static class TestCommand {
@@ -1303,7 +1285,7 @@ public class Tester extends Generator {
     private String inputFilename;
     private File outputFile;
     private boolean someoption;
-    private Integer minimum = new Integer(0);
+    private Integer minimum = Integer.valueOf(0);
     private Integer[] values = new Integer[10];
 
     public String getInputFilename() {
@@ -1348,13 +1330,13 @@ public class Tester extends Generator {
     @External(required = true) static String output;
   }
 
-  private static String[] args(final String... ss) {
-    return ss;
+  private static String[] args(final String... ¢) {
+    return ¢;
   }
-  private String[] args(final int n) {
-    final String[] $ = new String[n];
-    for (int i = 0; i < n; ++i)
-      $[i] = "N" + nextLong();
+  private String[] args(final int i) {
+    final String[] $ = new String[i];
+    for (int ¢ = 0; ¢ < i; ++¢)
+      $[¢] = "N" + nextLong();
     return $;
   }
 }
@@ -1423,11 +1405,11 @@ class RegexMatcher extends BaseMatcher<String> {
   public RegexMatcher(final String regex) {
     this.regex = regex;
   }
-  @Override public boolean matches(final Object o) {
-    return ((String) o).matches(regex);
+  @Override public boolean matches(final Object ¢) {
+    return ((String) ¢).matches(regex);
   }
-  @Override public void describeTo(final Description d) {
-    d.appendText("matches regex=");
+  @Override public void describeTo(final Description ¢) {
+    ¢.appendText("matches regex=");
   }
   public static RegexMatcher matches(final String regex) {
     return new RegexMatcher(regex);

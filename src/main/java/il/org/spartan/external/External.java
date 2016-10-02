@@ -242,8 +242,8 @@ public @interface External {
       final StringBuilder $ = new StringBuilder();
       for (final Object target : targets) {
         $.append(shortName(target) + ":\n");
-        for (final Entry<String, String> e : toOrderedMap(target).entrySet())
-          $.append("\t").append(e.getKey()).append("=").append(e.getValue()).append("\n");
+        for (final Entry<String, String> ¢ : toOrderedMap(target).entrySet())
+          $.append("\t").append(¢.getKey()).append("=").append(¢.getValue()).append("\n");
       }
       return $ + "";
     }
@@ -263,32 +263,29 @@ public @interface External {
       final Map<String, String> $ = new LinkedHashMap<>();
       for (final Object target : targets) {
         final Class<? extends Object> c = getClass(target);
-        for (final PropertyDescriptor p : descriptors(c))
-          addEntry($, target, p);
-        for (final Field f : fields(c))
-          addEntry($, target, f);
-        for (final Method m : getters(c))
-          addEntry($, target, m);
+        for (final PropertyDescriptor ¢ : descriptors(c))
+          addEntry($, target, ¢);
+        for (final Field ¢ : fields(c))
+          addEntry($, target, ¢);
+        for (final Method ¢ : getters(c))
+          addEntry($, target, ¢);
       }
       return $;
     }
-    private static void addEntry(final Map<String, String> es, final Object target, final Field f) {
+    private static void addEntry(final Map<String, String> s, final Object target, final Field f) {
       final Argument a = Argument.make(f);
-      if (a == null || es.containsKey(a.name))
-        return;
-      es.put(a.name, a.asString(a.get(target, f)));
+      if (a != null && !s.containsKey(a.name))
+        s.put(a.name, a.asString(a.get(target, f)));
     }
-    private static void addEntry(final Map<String, String> es, final Object target, final Method m) {
+    private static void addEntry(final Map<String, String> s, final Object target, final Method m) {
       final Argument a = Argument.make(m);
-      if (a == null || es.containsKey(a.name))
-        return;
-      es.put(a.name, a.asString(a.get(target, m)));
+      if (a != null && !s.containsKey(a.name))
+        s.put(a.name, a.asString(a.get(target, m)));
     }
-    private static void addEntry(final Map<String, String> es, final Object target, final PropertyDescriptor d) {
+    private static void addEntry(final Map<String, String> s, final Object target, final PropertyDescriptor d) {
       final Argument a = Argument.make(d);
-      if (a == null || es.containsKey(a.name))
-        return;
-      es.put(a.name, a.asString(a.get(target, d)));
+      if (a != null && !s.containsKey(a.name))
+        s.put(a.name, a.asString(a.get(target, d)));
     }
     /**
      * Convert the settings in the parameter to a {@link Properties} object.
@@ -303,10 +300,10 @@ public @interface External {
       final Properties $ = new Properties();
       for (final Object target : targets) {
         final Class<? extends Object> c = getClass(target);
-        for (final Field f : fields(c))
-          addProperties($, target, f);
-        for (final PropertyDescriptor p : descriptors(c))
-          addProperties($, target, p);
+        for (final Field ¢ : fields(c))
+          addProperties($, target, ¢);
+        for (final PropertyDescriptor ¢ : descriptors(c))
+          addProperties($, target, ¢);
       }
       return $;
     }
@@ -315,31 +312,29 @@ public @interface External {
 
     private static void addProperties(final Properties m, final Object target, final Field f) {
       final Argument a = Argument.make(f);
-      if (a == null)
-        return;
-      m.put(a.name, a.asString(a.get(target, f)));
+      if (a != null)
+        m.put(a.name, a.asString(a.get(target, f)));
     }
     private static void addProperties(final Properties p, final Object target, final PropertyDescriptor d) {
       final Argument a = Argument.make(d);
-      if (a == null)
-        return;
-      p.put(a.name, a.asString(a.get(target, d)));
+      if (a != null)
+        p.put(a.name, a.asString(a.get(target, d)));
     }
-    private static Class<? extends Object> getClass(final Object o) {
-      return o instanceof Class ? (Class<?>) o : o.getClass();
+    private static Class<? extends Object> getClass(final Object ¢) {
+      return ¢ instanceof Class ? (Class<?>) ¢ : ¢.getClass();
     }
-    private static String fullName(final Object o) {
-      return getClass(o).getName();
+    private static String fullName(final Object ¢) {
+      return getClass(¢).getName();
     }
-    static String shortName(final Object o) {
-      return getClass(o).getSimpleName();
+    static String shortName(final Object ¢) {
+      return getClass(¢).getSimpleName();
     }
-    private static void usage(final StringBuilder b, final Object target, final Class<? extends Object> c) {
+    private static void usage(final StringBuilder b, final Object target, final Class<? extends Object> o) {
       try {
-        for (final Field f : fields(c))
-          b.append(usage(target, f));
-        for (final PropertyDescriptor pd : descriptors(c))
-          b.append(usage(target, pd));
+        for (final Field ¢ : fields(o))
+          b.append(usage(target, ¢));
+        for (final PropertyDescriptor ¢ : descriptors(o))
+          b.append(usage(target, ¢));
       } catch (final Error ____) {
         // No point in treating any errors while collecting usage
         // information
@@ -364,13 +359,13 @@ public @interface External {
           residueIntoClass(arguments, (Class<?>) target);
     }
     private static void resiudueIntoInstance(final Object target, final List<String> arguments) {
-      for (final Field f : fields(target.getClass()))
-        residue(target, f, arguments);
+      for (final Field ¢ : fields(target.getClass()))
+        residue(target, ¢, arguments);
     }
     private static void residueIntoClass(final List<String> arguments, final Class<?> base) {
       for (Class<?> c = base; c != null; c = c.getSuperclass())
-        for (final Field f : c.getDeclaredFields())
-          residue(c, f, arguments);
+        for (final Field ¢ : c.getDeclaredFields())
+          residue(c, ¢, arguments);
     }
     private static void residue(final Object target, final Field f, final List<String> arguments) {
       if (f.getAnnotation(Residue.class) == null)
@@ -390,30 +385,30 @@ public @interface External {
       return arguments;
     }
     private void extractIntoClass(final Class<?> base, final List<String> arguments) {
-      for (final PropertyDescriptor p : descriptors(base))
-        extractInto(base, p, arguments);
+      for (final PropertyDescriptor ¢ : descriptors(base))
+        extractInto(base, ¢, arguments);
       for (Class<?> c = base; c != null; c = c.getSuperclass())
-        for (final Field f : c.getDeclaredFields())
-          extractInto(c, f, arguments);
+        for (final Field ¢ : c.getDeclaredFields())
+          extractInto(c, ¢, arguments);
     }
     private void extractIntoInstance(final Object target, final List<String> arguments) {
       final Class<? extends Object> c = target.getClass();
-      for (final PropertyDescriptor p : descriptors(c))
-        extractInto(target, p, arguments);
-      for (final Field f : fields(c))
-        extractInto(target, f, arguments);
+      for (final PropertyDescriptor ¢ : descriptors(c))
+        extractInto(target, ¢, arguments);
+      for (final Field ¢ : fields(c))
+        extractInto(target, ¢, arguments);
     }
-    private static PropertyDescriptor[] descriptors(final Class<? extends Object> c) {
+    private static PropertyDescriptor[] descriptors(final Class<? extends Object> o) {
       try {
-        return java.beans.Introspector.getBeanInfo(c).getPropertyDescriptors();
+        return java.beans.Introspector.getBeanInfo(o).getPropertyDescriptors();
       } catch (final IntrospectionException ____) { // Ignore errors of this
         // sort
         return new PropertyDescriptor[0];
       }
     }
     private void wrapErrors(final Object... targets) {
-      for (final Error e : errors)
-        System.err.println(e.getMessage());
+      for (final Error ¢ : errors)
+        System.err.println(¢.getMessage());
       if (errors.isEmpty())
         return;
       System.err.println(usage(targets));
@@ -466,42 +461,40 @@ public @interface External {
         extractInto(p, target);
       wrapErrors(targets);
     }
-    private static void extractInto(final Properties ps, final Object target) {
+    private static void extractInto(final Properties p, final Object target) {
       final Class<?> c = getClass(target);
-      for (final Field field : fields(c))
-        extract(target, field, ps);
-      for (final PropertyDescriptor p : descriptors(c))
-        extract(target, p, ps);
+      for (final Field ¢ : fields(c))
+        extract(target, ¢, p);
+      for (final PropertyDescriptor ¢ : descriptors(c))
+        extract(target, ¢, p);
     }
     private static List<Field> fields(final Class<?> base) {
       final ArrayList<Field> $ = new ArrayList<>();
       for (Class<?> c = base; c != null; c = c.getSuperclass())
-        for (final Field f : c.getDeclaredFields())
-          $.add(f);
+        for (final Field ¢ : c.getDeclaredFields())
+          $.add(¢);
       return $;
     }
     private static List<Method> getters(final Class<?> base) {
       final ArrayList<Method> $ = new ArrayList<>();
       for (Class<?> c = base; c != null; c = c.getSuperclass())
-        for (final Method m : c.getDeclaredMethods())
-          if (isGetter(m))
-            $.add(m);
+        for (final Method ¢ : c.getDeclaredMethods())
+          if (isGetter(¢))
+            $.add(¢);
       return $;
     }
-    private static boolean isGetter(final Method m) {
-      return m.getParameterTypes().length == 0 && m.getReturnType() != Void.TYPE;
+    private static boolean isGetter(final Method ¢) {
+      return ¢.getParameterTypes().length == 0 && ¢.getReturnType() != Void.TYPE;
     }
     private static void extract(final Object target, final Field f, final Properties p) {
       final Argument a = Argument.make(f);
-      if (a == null)
-        return;
-      a.set(f, target, a.extractValue(p));
+      if (a != null)
+        a.set(f, target, a.extractValue(p));
     }
     private static void extract(final Object target, final PropertyDescriptor d, final Properties p) {
       final Argument a = Argument.make(d);
-      if (a == null)
-        return;
-      a.set(d, target, a.extractValue(p));
+      if (a != null)
+        a.set(d, target, a.extractValue(p));
     }
     private void check(final List<String> arguments) {
       for (final String argument : arguments)
@@ -509,7 +502,7 @@ public @interface External {
           errors.add(new UnrecognizedOption(argument));
     }
 
-    private static abstract class Error extends RuntimeException {
+    private abstract static class Error extends RuntimeException {
       public Error(final String message, final Throwable cause) {
         super(message, cause);
       }
@@ -528,7 +521,7 @@ public @interface External {
       private static final long serialVersionUID = 1L;
     }
 
-    private static abstract class ArgumentError extends Error {
+    private abstract static class ArgumentError extends Error {
       public ArgumentError(final String option, final String error, final Throwable cause) {
         super(option + ": " + error, cause);
       }
@@ -556,24 +549,24 @@ public @interface External {
       private static final String PREFIX = "-";
       public final Class<?> type;
 
-      static Argument make(final Field f) {
-        return make(f.getAnnotation(External.class), f.getName(), f.getType());
+      static Argument make(final Field ¢) {
+        return make(¢.getAnnotation(External.class), ¢.getName(), ¢.getType());
       }
-      static Argument make(final Method m) {
-        return make(m.getAnnotation(External.class), m.getName(), m.getReturnType());
+      static Argument make(final Method ¢) {
+        return make(¢.getAnnotation(External.class), ¢.getName(), ¢.getReturnType());
       }
-      static Argument makeResidue(final Field f) {
-        if (f.getType().getComponentType() == null)
-          throw new NonArray(f.getName());
-        return new Argument(f.getName(), f.getType());
+      static Argument makeResidue(final Field ¢) {
+        if (¢.getType().getComponentType() == null)
+          throw new NonArray(¢.getName());
+        return new Argument(¢.getName(), ¢.getType());
       }
-      String asString(final Object o) {
-        return !type.isArray() ? o + "" : arrayValue((Object[]) o);
+      String asString(final Object ¢) {
+        return !type.isArray() ? ¢ + "" : arrayValue((Object[]) ¢);
       }
       private String arrayValue(final Object[] os) {
         final StringBuilder $ = new StringBuilder();
-        for (final Object o : os)
-          $.append($.length() == 0 ? "" : delimiter).append(o);
+        for (final Object ¢ : os)
+          $.append($.length() == 0 ? "" : delimiter).append(¢);
         return $ + "";
       }
       static Argument make(final PropertyDescriptor d) {
@@ -611,8 +604,8 @@ public @interface External {
             return $;
         return null;
       }
-      String extractValue(final Properties p) {
-        return p.get(name) != null ? (String) p.get(name) : alias != null ? (String) p.get(alias) : checkRequired();
+      String extractValue(final Properties ¢) {
+        return ¢.get(name) != null ? (String) ¢.get(name) : alias != null ? (String) ¢.get(alias) : checkRequired();
       }
       String extractValue(final List<String> arguments) {
         final Iterator<String> i = find(arguments);
@@ -629,13 +622,13 @@ public @interface External {
         final String sansPrefix = text.substring(PREFIX.length());
         return sansPrefix.equals(name) || alias != null && sansPrefix.equals(alias);
       }
-      private String extractValue(final Iterator<String> i) {
+      private String extractValue(final Iterator<String> ¢) {
         if (isBoolean())
           return "true";
-        if (!i.hasNext())
+        if (!¢.hasNext())
           throw new MissingValueForOption();
-        final String $ = i.next();
-        i.remove();
+        final String $ = ¢.next();
+        ¢.remove();
         return $;
       }
       String checkRequired() {
@@ -644,9 +637,8 @@ public @interface External {
         return null;
       }
       void set(final Field f, final Object target, final String value) {
-        if (value == null)
-          return;
-        set(f, target, asObject(value));
+        if (value != null)
+          set(f, target, asObject(value));
       }
       void set(final Field f, final Object target, final List<String> values) {
         set(f, target, asArrayObject(type.getComponentType(), values));
@@ -665,9 +657,8 @@ public @interface External {
         }
       }
       void set(final PropertyDescriptor d, final Object target, final String value) {
-        if (value == null)
-          return;
-        set(d, target, asObject(value));
+        if (value != null)
+          set(d, target, asObject(value));
       }
       private void set(final PropertyDescriptor d, final Object target, final Object value) {
         try {
@@ -704,8 +695,8 @@ public @interface External {
           throw new FieldUnreadable(f, e);
         }
       }
-      private static boolean empty(final String s) {
-        return s == null || "".equals(s);
+      private static boolean empty(final String ¢) {
+        return ¢ == null || "".equals(¢);
       }
       private Object asObject(final String value) {
         return isBoolean() ? Boolean.TRUE
@@ -722,68 +713,68 @@ public @interface External {
         if (c == String.class)
           return strings;
         final Object[] $ = (Object[]) Array.newInstance(c, strings.length);
-        for (int i = 0; i < $.length; ++i)
-          $[i] = instantiate(c, strings[i]);
+        for (int ¢ = 0; ¢ < $.length; ++¢)
+          $[¢] = instantiate(c, strings[¢]);
         return $;
       }
       private Object asPrimitivesArrayObject(final Class<?> c, final String[] ss) {
         if (c == byte.class) {
           final byte[] $ = (byte[]) Array.newInstance(c, ss.length);
-          for (int i = 0; i < $.length; ++i)
-            $[i] = ((Byte) instantiate(c, ss[i])).byteValue();
+          for (int ¢ = 0; ¢ < $.length; ++¢)
+            $[¢] = ((Byte) instantiate(c, ss[¢])).byteValue();
           return $;
         }
         if (c == short.class) {
           final short[] $ = (short[]) Array.newInstance(c, ss.length);
-          for (int i = 0; i < $.length; ++i)
-            $[i] = ((Short) instantiate(c, ss[i])).shortValue();
+          for (int ¢ = 0; ¢ < $.length; ++¢)
+            $[¢] = ((Short) instantiate(c, ss[¢])).shortValue();
           return $;
         }
         if (c == int.class) {
           final int[] $ = (int[]) Array.newInstance(c, ss.length);
-          for (int i = 0; i < $.length; ++i)
-            $[i] = ((Integer) instantiate(c, ss[i])).intValue();
+          for (int ¢ = 0; ¢ < $.length; ++¢)
+            $[¢] = ((Integer) instantiate(c, ss[¢])).intValue();
           return $;
         }
         if (c == long.class) {
           final long[] $ = (long[]) Array.newInstance(c, ss.length);
-          for (int i = 0; i < $.length; ++i)
-            $[i] = ((Long) instantiate(c, ss[i])).longValue();
+          for (int ¢ = 0; ¢ < $.length; ++¢)
+            $[¢] = ((Long) instantiate(c, ss[¢])).longValue();
           return $;
         }
         if (c == float.class) {
           final float[] $ = (float[]) Array.newInstance(c, ss.length);
-          for (int i = 0; i < $.length; ++i)
-            $[i] = ((Float) instantiate(c, ss[i])).floatValue();
+          for (int ¢ = 0; ¢ < $.length; ++¢)
+            $[¢] = ((Float) instantiate(c, ss[¢])).floatValue();
           return $;
         }
         if (c != double.class)
           return null;
         final double[] $ = (double[]) Array.newInstance(c, ss.length);
-        for (int i = 0; i < $.length; ++i)
-          $[i] = ((Double) instantiate(c, ss[i])).doubleValue();
+        for (int ¢ = 0; ¢ < $.length; ++¢)
+          $[¢] = ((Double) instantiate(c, ss[¢])).doubleValue();
         return $;
       }
       private Object asArrayObject(final Class<?> c, final List<String> values) {
         final Object[] $ = (Object[]) Array.newInstance(c, values.size());
-        for (int i = 0; i < $.length; ++i)
-          $[i] = instantiate(c, values.get(i));
+        for (int ¢ = 0; ¢ < $.length; ++¢)
+          $[¢] = instantiate(c, values.get(¢));
         return $;
       }
       private Object instantiate(final Class<?> c, final String value) {
         try {
           if (c == byte.class)
-            return new Byte(value);
+            return Byte.valueOf(value);
           if (c == short.class)
-            return new Short(value);
+            return Short.valueOf(value);
           if (c == int.class)
-            return new Integer(value);
+            return Integer.valueOf(value);
           if (c == long.class)
-            return new Long(value);
+            return Long.valueOf(value);
           if (c == double.class)
-            return new Double(value);
+            return Double.valueOf(value);
           if (c == float.class)
-            return new Float(value);
+            return Float.valueOf(value);
         } catch (final NumberFormatException e) {
           throw new NumericParsingError(value, e);
         }
@@ -824,8 +815,8 @@ public @interface External {
           else {
             final List<Object> list = new ArrayList<>();
             final int len = Array.getLength(defaultValue);
-            for (int i = 0; i < len; ++i)
-              list.add(Array.get(defaultValue, i));
+            for (int ¢ = 0; ¢ < len; ++¢)
+              list.add(Array.get(defaultValue, ¢));
             $.append(list);
           }
           $.append(")");
@@ -839,10 +830,10 @@ public @interface External {
           return "flag";
         if (type.isEnum()) {
           final StringBuilder $ = new StringBuilder();
-          for (final Object e : type.getEnumConstants()) {
+          for (final Object ¢ : type.getEnumConstants()) {
             if ($.length() != 0)
               $.append("|");
-            $.append(e);
+            $.append(¢);
           }
           return $ + "";
         }

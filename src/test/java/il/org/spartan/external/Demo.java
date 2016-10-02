@@ -83,18 +83,18 @@ public class Demo extends Base {
     printResidue(es);
   }
   private static void printResidue(final Object[] os) {
-    System.out.format("%d remaining arguments injected into a data member of type %s[]:\n", new Integer(os.length),
+    System.out.format("%d remaining arguments injected into a data member of type %s[]:\n", Integer.valueOf(os.length),
         os.getClass().getComponentType().getSimpleName());
     System.out.println("===================================================================");
-    for (int i = 0; i < os.length; ++i)
-      System.out.format("\t %d) '%s'\n", new Integer(i), os[i]);
+    for (int ¢ = 0; ¢ < os.length; ++¢)
+      System.out.format("\t %d) '%s'\n", Integer.valueOf(¢), os[¢]);
     System.out.println();
   }
   private static void printRemaining(final List<String> remaining) {
-    System.out.format("%d remaining arguments:\n", new Integer(remaining.size()));
+    System.out.format("%d remaining arguments:\n", Integer.valueOf(remaining.size()));
     System.out.println("======================");
-    for (int i = 0; i < remaining.size(); ++i)
-      System.out.format("\t %d) '%s'\n", new Integer(i), remaining.get(i));
+    for (int ¢ = 0; ¢ < remaining.size(); ++¢)
+      System.out.format("\t %d) '%s'\n", Integer.valueOf(¢), remaining.get(¢));
     System.out.println();
   }
   private void printAutomaticallyGeneratedKeyValueList() {
@@ -132,8 +132,8 @@ public class Demo extends Base {
     }
     if (path != null) {
       System.out.println("Path:");
-      for (final File f : path)
-        System.out.println("\t* " + f);
+      for (final File ¢ : path)
+        System.out.println("\t* " + ¢);
     }
     System.out.println();
   }
@@ -145,7 +145,7 @@ enum Gender {
 
 class Base {
   // Inherited static fields
-  @External private static String firstName = null;
+  @External private static String firstName;
   @External(alias = "i") private static File inputFile;
   // Inherited non-static fields
   @External private String lastName;
