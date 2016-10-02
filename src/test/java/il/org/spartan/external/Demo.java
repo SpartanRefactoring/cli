@@ -141,7 +141,7 @@ public class Demo extends Base {
 }
 
 enum Gender {
-  Female, Male;
+  Female, Male
 }
 
 class Base {
