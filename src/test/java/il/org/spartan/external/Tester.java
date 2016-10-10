@@ -898,25 +898,25 @@ public class Tester extends Generator {
   }
 
   @SuppressWarnings("unused") static class ClassWithProperties {
-    @External public void setThis(final int ____) {
+    @External public void setThis(final int __) {
       // filler property function
     }
-    @External public void setIs(final int ____) {
+    @External public void setIs(final int __) {
       // filler property function
     }
-    @External public void setThe(final int ____) {
+    @External public void setThe(final int __) {
       // filler property function
     }
-    @External public void setTime(final int ____) {
+    @External public void setTime(final int __) {
       // filler property function
     }
-    @External public void setFor____all(final int for____all) {
+    @External public void setFor____all(final int __) {
       // filler property function
     }
-    @External public void setGood(final int good) {
+    @External public void setGood(final int __) {
       // filler property function
     }
-    @External public void setMen(final int men) {
+    @External public void setMen(final int __) {
       // filler property function
     }
   }
@@ -1168,10 +1168,10 @@ public class Tester extends Generator {
       oldSecurityManager = System.getSecurityManager();
       this.expectedStatus = expectedStatus;
     }
-    @Override public void checkPermission(final Permission p) {
+    @Override public void checkPermission(final Permission __) {
       // allow anything.
     }
-    @Override public void checkPermission(final Permission p, final Object context) {
+    @Override public void checkPermission(final Permission __, final Object context) {
       // allow anything.
     }
     @Override public void checkExit(final int status) {
@@ -1238,7 +1238,7 @@ public class Tester extends Generator {
   }
 
   static class OptionClass {
-    @SuppressWarnings("unused") OptionClass(final String a) throws Exception {
+    @SuppressWarnings("unused") OptionClass(final String __) throws Exception {
       throw new IllegalArgumentException();
     }
   }

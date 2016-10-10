@@ -542,7 +542,7 @@ public @interface External {
 
     static class Argument {
       public final String name;
-      public final boolean required;
+      public final boolean mandatory;
       public final String alias;
       private final String description;
       private final String delimiter;
@@ -592,7 +592,7 @@ public @interface External {
       private Argument(final String name, final Class<?> type, final String alias, final boolean required, final String description,
           final String delimiter) {
         this.type = type;
-        this.required = required;
+        this.mandatory = required;
         this.alias = alias;
         this.description = description;
         this.delimiter = delimiter;
@@ -632,7 +632,7 @@ public @interface External {
         return $;
       }
       String checkRequired() {
-        if (required)
+        if (mandatory)
           throw new RequiredOption();
         return null;
       }
@@ -803,6 +803,9 @@ public @interface External {
           throw new ConstructorWithSingleStringArgumentMissing(c, e);
         }
       }
+      /**
+       * [[SuppressWarningsSpartan]]
+       */
       String usage(final Object defaultValue) {
         final StringBuilder $ = optionName();
         $.append(" [").append(typeName()).append("] ").append(description);
@@ -821,7 +824,7 @@ public @interface External {
           }
           $.append(")");
         }
-        if (required)
+        if (mandatory)
           $.append(" mandatory");
         return $ + "";
       }
