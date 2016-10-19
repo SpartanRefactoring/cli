@@ -1,6 +1,6 @@
 /**
- * Copyright (c) 2005, Sam Pullara. All Rights Reserved. You may modify and
-` * redistribute as long as this attribution remains.
+ * Copyright (c) 2005, Sam Pullara. All Rights Reserved. You may modify and ` *
+ * redistribute as long as this attribution remains.
  * <p>
  * Modernized and polished by Yossi Gil yogi@cs.technion.ac.il, 2011. Original
  * copyright remains. Original version can be found <a

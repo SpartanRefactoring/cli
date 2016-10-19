@@ -103,11 +103,11 @@ public @interface External {
   @Documented //
   @Retention(RetentionPolicy.RUNTIME) //
   @Target({ ElementType.FIELD, ElementType.METHOD }) //
-  public @interface Residue {
+  @interface Residue {
     //
   }
 
-  public static class Introspector {
+  class Introspector {
     /**
      * Parse a set of arguments and populate the target with the appropriate
      * values.
@@ -592,7 +592,7 @@ public @interface External {
       private Argument(final String name, final Class<?> type, final String alias, final boolean required, final String description,
           final String delimiter) {
         this.type = type;
-        this.mandatory = required;
+        mandatory = required;
         this.alias = alias;
         this.description = description;
         this.delimiter = delimiter;

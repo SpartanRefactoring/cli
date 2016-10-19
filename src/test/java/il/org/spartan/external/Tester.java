@@ -489,10 +489,9 @@ public class Tester extends Generator {
   @Test public void toProperties() {
     assertEquals("value1", Introspector.toProperties(new Object() {
       @External final String key1 = "value1";
-      @SuppressWarnings("unused") String key2 = "value2";
 
       @External public void setKey2(final String key2) {
-        this.key2 = key2;
+        /* Demo */
       }
     }).get("key1"));
   }
@@ -720,7 +719,7 @@ public class Tester extends Generator {
         put("hashCode", nextIntS());
       }
       static final long serialVersionUID = 1L;
-    }, (new Object() {
+    }, new Object() {
       @External public void setHashCode(final int hashCode) {
         throw new RuntimeException(hashCode + "");
       }
@@ -730,11 +729,11 @@ public class Tester extends Generator {
       @Override public int hashCode() {
         return hashCode;
       }
-    }));
+    });
   }
   @Test(expected = FieldConversionError.class) //
   public void argumentsSetterThrowsException() {
-    extract(args("-hashCode", nextIntS()), (new Object() {
+    extract(args("-hashCode", nextIntS()), new Object() {
       @External public void setHashCode(final int hashCode) {
         throw new RuntimeException(hashCode + "");
       }
@@ -744,7 +743,7 @@ public class Tester extends Generator {
       @Override public int hashCode() {
         return hashCode;
       }
-    }));
+    });
   }
   @Test public void classWithGetter() {
     class ____ {
@@ -874,7 +873,7 @@ public class Tester extends Generator {
         assertEquals(oldValue, option());
       }
     }
-    assertEquals(oldValue, (new B3(args("-option", newValue + ""))).option());
+    assertEquals(oldValue, new B3(args("-option", newValue + "")).option());
   }
   @Test public void settingsContainsKeyValue() {
     final String it = settings(new Object() {
@@ -978,10 +977,8 @@ public class Tester extends Generator {
   }
   @Test public void usageProperties() {
     assertThat(usage(new Object() {
-      @SuppressWarnings("unused") String input = "inputValue";
-
       @External public void setInput(final String input) {
-        this.input = input;
+        /* Demo */
       }
     }), containsString("-input"));
   }
@@ -1047,14 +1044,8 @@ public class Tester extends Generator {
   @Test(expected = ConstructorWithSingleStringArgumentMissing.class) //
   public void missingStringConstructor() {
     class LocalClass {
-      @SuppressWarnings("unused") int ____;
       {
-        ____ = 1;
-      }
-
-      /** This is not really a string constructor since it is an inner class */
-      @SuppressWarnings("unused") LocalClass(final String a) {
-        ____ = a.hashCode();
+        /* Demo */
       }
     }
     extract(args("-option", nextIntS()), new Object() {
@@ -1069,10 +1060,6 @@ public class Tester extends Generator {
   @Test(expected = MissingValueForOption.class) public void missingValue() {
     extract(args("blah", "-option"), new Object() {
       @External public int option;
-
-      @SuppressWarnings("unused") public String ________() {
-        return option + "";
-      }
     });
   }
   @Test(expected = RequiredOption.class) public void missingRequiredOptionProperties() {
@@ -1095,39 +1082,22 @@ public class Tester extends Generator {
   }
   @Test public void usageProperty() {
     assertThat(usage(new Object() {
-      boolean option;
-
-      @SuppressWarnings("unused") public boolean isOption() {
-        return option;
-      }
       @External public void setOption(final boolean option) {
-        this.option = option;
       }
     }), containsString("option"));
   }
   @Test public void usagePropertyValue() {
     assertThat(usage(new Object() {
-      String option = "myValue";
-
-      @SuppressWarnings("unused") public String getOption() {
-        return option;
-      }
       @External public void setOption(final String option) {
-        this.option = option;
       }
     }), containsString("myValue"));
   }
   @Test public void usagePropertyReadThrowsException() {
     final String usage = usage(new Object() {
       @External final String firstOption = "firstValue";
-      @SuppressWarnings("unused") String option = "myValue";
       @External final String secondOption = "secondValue";
 
-      @SuppressWarnings("unused") public String getOption() {
-        throw new RuntimeException();
-      }
       @External public void setOption(final String option) {
-        this.option = option;
       }
     });
     assertThat(usage, containsString("firstOption"));
@@ -1249,7 +1219,7 @@ public class Tester extends Generator {
   }
 
   private enum EnumType {
-    EnumA, EnumB, EnumC;
+    EnumA, EnumB, EnumC
   }
 
   private static class ClassWithEnumOption {
