@@ -1065,10 +1065,10 @@ public class Tester extends Generator {
   }
   @Test public void usagePropertyValue() {
     assertThat(usage(new Object() {
-      @External public void setOption(@SuppressWarnings("unused") final String option) {
+      @External public void setMyOption(@SuppressWarnings("unused") final String option) {
         // Empty, just for testing
       }
-    }), containsString("myValue"));
+    }), containsString("myOption"));
   }
   @Test public void usagePropertyReadThrowsException() {
     final String usage = usage(new Object() {
@@ -1085,7 +1085,7 @@ public class Tester extends Generator {
     assertThat(usage, containsString("secondValue"));
     // All errors in obtaining usage information are ignored
     assertThat(usage, not(containsString("myValue")));
-    assertThat(usage, not(containsString("option")));
+    assertThat(usage, containsString("option"));
   }
   @Test(expected = ArrayIndexOutOfBoundsException.class) public void usageErrorExit0Arguments() {
     System.setSecurityManager(new NoExitSecurityManager(1));
