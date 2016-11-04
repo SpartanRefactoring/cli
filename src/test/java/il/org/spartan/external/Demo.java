@@ -8,14 +8,10 @@
  */
 package il.org.spartan.external;
 
-import static il.org.spartan.external.External.Introspector.extract;
-import static il.org.spartan.external.External.Introspector.settings;
-import static il.org.spartan.external.External.Introspector.toProperties;
-import static il.org.spartan.external.External.Introspector.usage;
-import static il.org.spartan.external.External.Introspector.usageErrorExit;
+import static il.org.spartan.external.External.Introspector.*;
 
-import java.io.File;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 /**
  * A simple demonstration of the capabilities of use of {@link External} and the

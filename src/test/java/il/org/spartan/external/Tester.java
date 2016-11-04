@@ -8,46 +8,22 @@
  */
 package il.org.spartan.external;
 
-import static il.org.spartan.external.External.Introspector.extract;
-import static il.org.spartan.external.External.Introspector.settings;
-import static il.org.spartan.external.External.Introspector.usage;
-import static il.org.spartan.external.External.Introspector.usageErrorExit;
-import static il.org.spartan.external.RegexMatcher.matches;
-import static org.hamcrest.CoreMatchers.containsString;
+import static il.org.spartan.external.External.Introspector.*;
+import static il.org.spartan.external.RegexMatcher.*;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNot.not;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
-import java.io.File;
-import java.security.Permission;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Random;
+import java.io.*;
+import java.security.*;
+import java.util.*;
 
-import org.hamcrest.BaseMatcher;
-import org.hamcrest.Description;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.hamcrest.*;
+import org.junit.*;
 
-import il.org.spartan.external.External.Introspector;
-import il.org.spartan.external.External.Introspector.Argument.ConstructorWithSingleStringArgumentMissing;
-import il.org.spartan.external.External.Introspector.Argument.DuplicateOption;
-import il.org.spartan.external.External.Introspector.Argument.FieldConversionError;
-import il.org.spartan.external.External.Introspector.Argument.FieldInitializationError;
-import il.org.spartan.external.External.Introspector.Argument.FieldIsFinal;
-import il.org.spartan.external.External.Introspector.Argument.InvalidEnumValue;
-import il.org.spartan.external.External.Introspector.Argument.MissingValueForOption;
-import il.org.spartan.external.External.Introspector.Argument.NumericParsingError;
-import il.org.spartan.external.External.Introspector.Argument.RequiredOption;
-import il.org.spartan.external.External.Introspector.Argument.WrongTarget;
-import il.org.spartan.external.External.Introspector.NonArray;
-import il.org.spartan.external.External.Introspector.UnrecognizedOption;
+import il.org.spartan.external.External.*;
+import il.org.spartan.external.External.Introspector.Argument.*;
 
 /**
  * @author: Sam Pullara.
@@ -490,7 +466,7 @@ public class Tester extends Generator {
     assertEquals("value1", Introspector.toProperties(new Object() {
       @External final String key1 = "value1";
 
-      @External public void setKey2(final String key2) {
+      @External public void setKey2(@SuppressWarnings("unused") final String key2) {
         /* Demo */
       }
     }).get("key1"));
@@ -977,7 +953,7 @@ public class Tester extends Generator {
   }
   @Test public void usageProperties() {
     assertThat(usage(new Object() {
-      @External public void setInput(final String input) {
+      @External public void setInput(@SuppressWarnings("unused") final String input) {
         /* Demo */
       }
     }), containsString("-input"));
@@ -1082,13 +1058,15 @@ public class Tester extends Generator {
   }
   @Test public void usageProperty() {
     assertThat(usage(new Object() {
-      @External public void setOption(final boolean option) {
+      @External public void setOption(@SuppressWarnings("unused") final boolean option) {
+        // Empty, just for testing
       }
     }), containsString("option"));
   }
   @Test public void usagePropertyValue() {
     assertThat(usage(new Object() {
-      @External public void setOption(final String option) {
+      @External public void setOption(@SuppressWarnings("unused") final String option) {
+        // Empty, just for testing
       }
     }), containsString("myValue"));
   }
@@ -1097,7 +1075,8 @@ public class Tester extends Generator {
       @External final String firstOption = "firstValue";
       @External final String secondOption = "secondValue";
 
-      @External public void setOption(final String option) {
+      @External public void setOption(@SuppressWarnings("unused") final String option) {
+        // Empty, just for testing
       }
     });
     assertThat(usage, containsString("firstOption"));
