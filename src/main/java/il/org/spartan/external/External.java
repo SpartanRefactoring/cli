@@ -11,11 +11,15 @@
  */
 package il.org.spartan.external;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.beans.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.Map.*;
+import java.util.stream.Collectors;
 
 /**
  * Annotation for <code><b>static</b></code> and non-<code><b>static</b></code>
@@ -42,22 +46,22 @@ public @interface External {
   /**
    * A description of the argument that will appear in the usage method
    */
-  String value() default "";
+  @NotNull String value() default "";
   /**
    * Further description of the argument that will appear in the usage method
    * (if both this and the and the #value field are present, then the full
    * description is obtained by their concatenation, first #value and then this
    * field.
    */
-  String description() default "";
+  @NotNull String description() default "";
   /**
    * Optional name of this command line option, overriding the data member name.
    */
-  String name() default "";
+  @NotNull String name() default "";
   /**
    * An alias for this option
    */
-  String alias() default "";
+  @NotNull String alias() default "";
   /**
    * If true, then the option must be set for the parser not to fail
    */
@@ -65,7 +69,7 @@ public @interface External {
   /**
    * A delimiter for arguments that are multi-valued.
    */
-  String delimiter() default ",";
+  @NotNull String delimiter() default ",";
 
   /**
    * Annotation for <code><b>static</b></code> and non-
@@ -110,6 +114,7 @@ public @interface External {
      *           {@link External} annotation to a <code><b>final</b></code>
      *           field.
      */
+    @NotNull
     public static List<String> extract(final String[] args, final Object... targets) {
       return extract(cloneAsList(args), targets);
     }
@@ -134,8 +139,9 @@ public @interface External {
      *           {@link External} annotation to a <code><b>final</b></code>
      *           field.
      */
-    public static List<String> extract(final List<String> arguments, final Object... targets) {
-      final List<String> $ = new Introspector().extractInto(arguments, targets);
+    @NotNull
+    public static List<String> extract(@NotNull final List<String> arguments, @NotNull final Object... targets) {
+      @NotNull final List<String> $ = new Introspector().extractInto(arguments, targets);
       residue($, targets);
       return $;
     }
@@ -148,6 +154,7 @@ public @interface External {
      *          the main class.
      * @return Usage string
      */
+    @NotNull
     public static String usage(final Object... targets) {
       return usage(targets[0], "", targets);
     }
@@ -162,8 +169,9 @@ public @interface External {
      *          found.
      * @return Usage string
      */
-    public static String usage(final Object main, final String usage, final Object... targets) {
-      final StringBuilder $ = new StringBuilder("Usage: java " + fullName(main) + " " + usage + "\n");
+    @NotNull
+    public static String usage(final Object main, final String usage, @NotNull final Object... targets) {
+      @NotNull final StringBuilder $ = new StringBuilder("Usage: java " + fullName(main) + " " + usage + "\n");
       for (final Object target : targets)
         usage($, target, getClass(target));
       return $ + "";
@@ -179,6 +187,7 @@ public @interface External {
      *          the main class.
      * @return Usage string
      */
+    @NotNull
     public static String usage(final String usage, final Object... targets) {
       return usage(targets[0], usage, targets);
     }
@@ -221,11 +230,12 @@ public @interface External {
      * @return a pretty print string describing the current settings of the
      *         parameter.
      */
-    public static String settings(final Object... targets) {
-      final StringBuilder $ = new StringBuilder();
+    @NotNull
+    public static String settings(@NotNull final Object... targets) {
+      @NotNull final StringBuilder $ = new StringBuilder();
       for (final Object target : targets) {
-        $.append(shortName(target) + ":\n");
-        for (final Entry<String, String> ¢ : toOrderedMap(target).entrySet())
+        $.append(shortName(target)).append(":\n");
+        for (@NotNull final Entry<String, String> ¢ : toOrderedMap(target).entrySet())
           $.append("\t").append(¢.getKey()).append("=").append(¢.getValue()).append("\n");
       }
       return $ + "";
@@ -242,31 +252,32 @@ public @interface External {
      * @return a {@link Set} of {@link java.util.Map.Entry} objects, each
      *         containing a key,value pair.
      */
-    public static Map<String, String> toOrderedMap(final Object... targets) {
-      final Map<String, String> $ = new LinkedHashMap<>();
+    @NotNull
+    public static Map<String, String> toOrderedMap(@NotNull final Object... targets) {
+      @NotNull final Map<String, String> $ = new LinkedHashMap<>();
       for (final Object target : targets) {
-        final Class<? extends Object> c = getClass(target);
-        for (final PropertyDescriptor ¢ : descriptors(c))
+        @NotNull final Class<?> c = getClass(target);
+        for (@NotNull final PropertyDescriptor ¢ : descriptors(c))
           addEntry($, target, ¢);
-        for (final Field ¢ : fields(c))
+        for (@NotNull final Field ¢ : fields(c))
           addEntry($, target, ¢);
-        for (final Method ¢ : getters(c))
+        for (@NotNull final Method ¢ : getters(c))
           addEntry($, target, ¢);
       }
       return $;
     }
-    private static void addEntry(final Map<String, String> s, final Object target, final Field f) {
-      final Argument a = Argument.make(f);
+    private static void addEntry(@NotNull final Map<String, String> s, final Object target, @NotNull final Field f) {
+      @Nullable final Argument a = Argument.make(f);
       if (a != null && !s.containsKey(a.name))
         s.put(a.name, a.asString(a.get(target, f)));
     }
-    private static void addEntry(final Map<String, String> s, final Object target, final Method m) {
-      final Argument a = Argument.make(m);
+    private static void addEntry(@NotNull final Map<String, String> s, final Object target, @NotNull final Method m) {
+      @Nullable final Argument a = Argument.make(m);
       if (a != null && !s.containsKey(a.name))
         s.put(a.name, a.asString(a.get(target, m)));
     }
-    private static void addEntry(final Map<String, String> s, final Object target, final PropertyDescriptor d) {
-      final Argument a = Argument.make(d);
+    private static void addEntry(@NotNull final Map<String, String> s, final Object target, @NotNull final PropertyDescriptor d) {
+      @Nullable final Argument a = Argument.make(d);
       if (a != null && !s.containsKey(a.name))
         s.put(a.name, a.asString(a.get(target, d)));
     }
@@ -279,13 +290,14 @@ public @interface External {
      *          the main class.
      * @return a {@link Properties} object with the settings of the parameter.
      */
-    public static Properties toProperties(final Object... targets) {
-      final Properties $ = new Properties();
+    @NotNull
+    public static Properties toProperties(@NotNull final Object... targets) {
+      @NotNull final Properties $ = new Properties();
       for (final Object target : targets) {
-        final Class<? extends Object> c = getClass(target);
-        for (final Field ¢ : fields(c))
+        @NotNull final Class<?> c = getClass(target);
+        for (@NotNull final Field ¢ : fields(c))
           addProperties($, target, ¢);
-        for (final PropertyDescriptor ¢ : descriptors(c))
+        for (@NotNull final PropertyDescriptor ¢ : descriptors(c))
           addProperties($, target, ¢);
       }
       return $;
@@ -293,17 +305,18 @@ public @interface External {
 
     private final List<Error> errors = new ArrayList<>();
 
-    private static void addProperties(final Properties m, final Object target, final Field f) {
-      final Argument a = Argument.make(f);
+    private static void addProperties(@NotNull final Properties m, final Object target, @NotNull final Field f) {
+      @Nullable final Argument a = Argument.make(f);
       if (a != null)
         m.put(a.name, a.asString(a.get(target, f)));
     }
-    private static void addProperties(final Properties p, final Object target, final PropertyDescriptor d) {
-      final Argument a = Argument.make(d);
+    private static void addProperties(@NotNull final Properties p, final Object target, @NotNull final PropertyDescriptor d) {
+      @Nullable final Argument a = Argument.make(d);
       if (a != null)
         p.put(a.name, a.asString(a.get(target, d)));
     }
-    private static Class<? extends Object> getClass(final Object ¢) {
+    @NotNull
+    private static Class<?> getClass(final Object ¢) {
       return ¢ instanceof Class ? (Class<?>) ¢ : ¢.getClass();
     }
     private static String fullName(final Object ¢) {
@@ -312,52 +325,56 @@ public @interface External {
     static String shortName(final Object ¢) {
       return getClass(¢).getSimpleName();
     }
-    private static void usage(final StringBuilder b, final Object target, final Class<? extends Object> o) {
+    private static void usage(@NotNull final StringBuilder b, final Object target, final Class<?> o) {
       try {
-        for (final Field ¢ : fields(o))
+        for (@NotNull final Field ¢ : fields(o))
           b.append(usage(target, ¢));
-        for (final PropertyDescriptor ¢ : descriptors(o))
+        for (@NotNull final PropertyDescriptor ¢ : descriptors(o))
           b.append(usage(target, ¢));
-      } catch (final Error ____) {
+      } catch (@NotNull final Error ____) {
         // No point in treating any errors while collecting usage
         // information
       }
     }
-    private static String usage(final Object target, final PropertyDescriptor d) {
-      final Argument a = Argument.make(d);
+    @NotNull
+    private static String usage(final Object target, @NotNull final PropertyDescriptor d) {
+      @Nullable final Argument a = Argument.make(d);
       return a == null ? "" : a.usage(a.get(target, d)) + "\n";
     }
-    private static String usage(final Object target, final Field f) {
-      final Argument $ = Argument.make(f);
+    @NotNull
+    private static String usage(final Object target, @NotNull final Field f) {
+      @Nullable final Argument $ = Argument.make(f);
       return $ == null ? "" : $.usage($.get(target, f)) + "\n";
     }
+    @NotNull
     private static ArrayList<String> cloneAsList(final String[] args) {
       return new ArrayList<>(Arrays.asList(args));
     }
-    private static void residue(final List<String> arguments, final Object[] targets) {
+    private static void residue(@NotNull final List<String> arguments, @NotNull final Object[] targets) {
       for (final Object target : targets)
         if (!(target instanceof Class))
-          resiudueIntoInstance(target, arguments);
+          residueIntoInstance(target, arguments);
         else
           residueIntoClass(arguments, (Class<?>) target);
     }
-    private static void resiudueIntoInstance(final Object target, final List<String> arguments) {
-      for (final Field ¢ : fields(target.getClass()))
+    private static void residueIntoInstance(@NotNull final Object target, @NotNull final List<String> arguments) {
+      for (@NotNull final Field ¢ : fields(target.getClass()))
         residue(target, ¢, arguments);
     }
-    private static void residueIntoClass(final List<String> arguments, final Class<?> base) {
+    private static void residueIntoClass(@NotNull final List<String> arguments, final Class<?> base) {
       for (Class<?> c = base; c != null; c = c.getSuperclass())
-        for (final Field ¢ : c.getDeclaredFields())
+        for (@NotNull final Field ¢ : c.getDeclaredFields())
           residue(c, ¢, arguments);
     }
-    private static void residue(final Object target, final Field f, final List<String> arguments) {
+    private static void residue(final Object target, @NotNull final Field f, @NotNull final List<String> arguments) {
       if (f.getAnnotation(Residue.class) == null)
         return;
-      final Argument a = Argument.makeResidue(f);
+      @NotNull final Argument a = Argument.makeResidue(f);
       if (a != null)
         a.set(f, target, arguments);
     }
-    private List<String> extractInto(final List<String> arguments, final Object... targets) {
+    @NotNull
+    private List<String> extractInto(@NotNull final List<String> arguments, @NotNull final Object... targets) {
       for (final Object target : targets)
         if (!(target instanceof Class))
           extractIntoInstance(target, arguments);
@@ -367,51 +384,51 @@ public @interface External {
       wrapErrors(targets);
       return arguments;
     }
-    private void extractIntoClass(final Class<?> base, final List<String> arguments) {
-      for (final PropertyDescriptor ¢ : descriptors(base))
+    private void extractIntoClass(final Class<?> base, @NotNull final List<String> arguments) {
+      for (@NotNull final PropertyDescriptor ¢ : descriptors(base))
         extractInto(base, ¢, arguments);
       for (Class<?> c = base; c != null; c = c.getSuperclass())
-        for (final Field ¢ : c.getDeclaredFields())
+        for (@NotNull final Field ¢ : c.getDeclaredFields())
           extractInto(c, ¢, arguments);
     }
-    private void extractIntoInstance(final Object target, final List<String> arguments) {
-      final Class<? extends Object> c = target.getClass();
-      for (final PropertyDescriptor ¢ : descriptors(c))
+    private void extractIntoInstance(@NotNull final Object target, @NotNull final List<String> arguments) {
+      final Class<?> c = target.getClass();
+      for (@NotNull final PropertyDescriptor ¢ : descriptors(c))
         extractInto(target, ¢, arguments);
-      for (final Field ¢ : fields(c))
+      for (@NotNull final Field ¢ : fields(c))
         extractInto(target, ¢, arguments);
     }
-    private static PropertyDescriptor[] descriptors(final Class<? extends Object> o) {
+    private static PropertyDescriptor[] descriptors(final Class<?> o) {
       try {
         return java.beans.Introspector.getBeanInfo(o).getPropertyDescriptors();
-      } catch (final IntrospectionException ____) { // Ignore errors of this
+      } catch (@NotNull final IntrospectionException ____) { // Ignore errors of this
         // sort
         return new PropertyDescriptor[0];
       }
     }
     private void wrapErrors(final Object... targets) {
-      for (final Error ¢ : errors)
+      for (@NotNull final Error ¢ : errors)
         System.err.println(¢.getMessage());
       if (errors.isEmpty())
         return;
       System.err.println(usage(targets));
       throw errors.get(0);
     }
-    private void extractInto(final Object target, final Field f, final List<String> arguments) {
+    private void extractInto(final Object target, @NotNull final Field f, @NotNull final List<String> arguments) {
       try {
-        final Argument a = Argument.make(f);
+        @Nullable final Argument a = Argument.make(f);
         if (a != null)
           a.set(f, target, a.extractValue(arguments));
-      } catch (final Error e) {
+      } catch (@NotNull final Error e) {
         errors.add(e);
       }
     }
-    private void extractInto(final Object target, final PropertyDescriptor d, final List<String> arguments) {
+    private void extractInto(final Object target, @NotNull final PropertyDescriptor d, @NotNull final List<String> arguments) {
       try {
-        final Argument a = Argument.make(d);
+        @Nullable final Argument a = Argument.make(d);
         if (a != null)
           a.set(d, target, a.extractValue(arguments));
-      } catch (final Error e) {
+      } catch (@NotNull final Error e) {
         errors.add(e);
       }
     }
@@ -436,53 +453,52 @@ public @interface External {
      *           {@link External} annotation to a <code><b>final</b></code>
      *           field.
      */
-    public static void extract(final Properties p, final Object... targets) {
+    public static void extract(@NotNull final Properties p, @NotNull final Object... targets) {
       new Introspector().extractInto(p, targets);
     }
-    private void extractInto(final Properties p, final Object[] targets) {
+    private void extractInto(@NotNull final Properties p, @NotNull final Object[] targets) {
       for (final Object target : targets)
         extractInto(p, target);
       wrapErrors(targets);
     }
-    private static void extractInto(final Properties p, final Object target) {
-      final Class<?> c = getClass(target);
-      for (final Field ¢ : fields(c))
+    private static void extractInto(@NotNull final Properties p, final Object target) {
+      @NotNull final Class<?> c = getClass(target);
+      for (@NotNull final Field ¢ : fields(c))
         extract(target, ¢, p);
-      for (final PropertyDescriptor ¢ : descriptors(c))
+      for (@NotNull final PropertyDescriptor ¢ : descriptors(c))
         extract(target, ¢, p);
     }
+    @NotNull
     private static List<Field> fields(final Class<?> base) {
-      final ArrayList<Field> $ = new ArrayList<>();
+      @NotNull final ArrayList<Field> $ = new ArrayList<>();
       for (Class<?> c = base; c != null; c = c.getSuperclass())
-        for (final Field ¢ : c.getDeclaredFields())
-          $.add(¢);
+        Collections.addAll($, c.getDeclaredFields());
       return $;
     }
+    @NotNull
     private static List<Method> getters(final Class<?> base) {
-      final ArrayList<Method> $ = new ArrayList<>();
+      @NotNull final ArrayList<Method> $ = new ArrayList<>();
       for (Class<?> c = base; c != null; c = c.getSuperclass())
-        for (final Method ¢ : c.getDeclaredMethods())
+        for (@NotNull final Method ¢ : c.getDeclaredMethods())
           if (isGetter(¢))
             $.add(¢);
       return $;
     }
-    private static boolean isGetter(final Method ¢) {
+    private static boolean isGetter(@NotNull final Method ¢) {
       return ¢.getParameterTypes().length == 0 && ¢.getReturnType() != Void.TYPE;
     }
-    private static void extract(final Object target, final Field f, final Properties p) {
-      final Argument a = Argument.make(f);
+    private static void extract(final Object target, @NotNull final Field f, @NotNull final Properties p) {
+      @Nullable final Argument a = Argument.make(f);
       if (a != null)
         a.set(f, target, a.extractValue(p));
     }
-    private static void extract(final Object target, final PropertyDescriptor d, final Properties p) {
-      final Argument a = Argument.make(d);
+    private static void extract(final Object target, @NotNull final PropertyDescriptor d, @NotNull final Properties p) {
+      @Nullable final Argument a = Argument.make(d);
       if (a != null)
         a.set(d, target, a.extractValue(p));
     }
-    private void check(final List<String> arguments) {
-      for (final String argument : arguments)
-        if (argument.startsWith("-"))
-          errors.add(new UnrecognizedOption(argument));
+    private void check(@NotNull final List<String> arguments) {
+      errors.addAll(arguments.stream().filter(argument -> argument.startsWith("-")).map(UnrecognizedOption::new).collect(Collectors.toList()));
     }
 
     private abstract static class Error extends RuntimeException {
@@ -532,37 +548,42 @@ public @interface External {
       private static final String PREFIX = "-";
       public final Class<?> type;
 
-      static Argument make(final Field ¢) {
+      @Nullable
+      static Argument make(@NotNull final Field ¢) {
         return make(¢.getAnnotation(External.class), ¢.getName(), ¢.getType());
       }
-      static Argument make(final Method ¢) {
+      @Nullable
+      static Argument make(@NotNull final Method ¢) {
         return make(¢.getAnnotation(External.class), ¢.getName(), ¢.getReturnType());
       }
-      static Argument makeResidue(final Field ¢) {
+      @NotNull
+      static Argument makeResidue(@NotNull final Field ¢) {
         if (¢.getType().getComponentType() == null)
           throw new NonArray(¢.getName());
         return new Argument(¢.getName(), ¢.getType());
       }
-      String asString(final Object ¢) {
+      @NotNull String asString(final Object ¢) {
         return !type.isArray() ? ¢ + "" : arrayValue((Object[]) ¢);
       }
-      private String arrayValue(final Object[] os) {
-        final StringBuilder $ = new StringBuilder();
+      @NotNull
+      private String arrayValue(@NotNull final Object[] os) {
+        @NotNull final StringBuilder $ = new StringBuilder();
         for (final Object ¢ : os)
           $.append($.length() == 0 ? "" : delimiter).append(¢);
         return $ + "";
       }
-      static Argument make(final PropertyDescriptor d) {
+      static Argument make(@NotNull final PropertyDescriptor d) {
         final Method m = d.getWriteMethod();
         return m == null ? null : Argument.make(m.getAnnotation(External.class), d.getName(), d.getPropertyType());
       }
-      static Argument make(final External x, final String name, final Class<?> type) {
+      @Nullable
+      static Argument make(@Nullable final External x, final String name, final Class<?> type) {
         return x == null ? null : new Argument(x, name, type);
       }
       private Argument(final String name, final Class<?> type) {
         this(name, type, null, false, null, null);
       }
-      private Argument(final External a, final String defaultName, final Class<?> type) {
+      private Argument(@NotNull final External a, final String defaultName, final Class<?> type) {
         this(defaultsTo(a.name(), defaultName), //
             type, defaultsTo(a.alias(), null), //
             a.required(), //
@@ -581,17 +602,17 @@ public @interface External {
         this.delimiter = delimiter;
         this.name = name;
       }
-      private Iterator<String> find(final List<String> arguments) {
-        for (final Iterator<String> $ = arguments.iterator(); $.hasNext();)
+      private Iterator<String> find(@NotNull final List<String> arguments) {
+        for (@NotNull final Iterator<String> $ = arguments.iterator(); $.hasNext();)
           if (equals($.next()))
             return $;
         return null;
       }
-      String extractValue(final Properties ¢) {
+      @NotNull String extractValue(@NotNull final Properties ¢) {
         return ¢.get(name) != null ? (String) ¢.get(name) : alias != null ? (String) ¢.get(alias) : checkRequired();
       }
-      String extractValue(final List<String> arguments) {
-        final Iterator<String> i = find(arguments);
+      @Nullable String extractValue(@NotNull final List<String> arguments) {
+        @Nullable final Iterator<String> i = find(arguments);
         if (i == null)
           return checkRequired();
         i.remove();
@@ -599,13 +620,13 @@ public @interface External {
           throw new DuplicateOption();
         return extractValue(i);
       }
-      private boolean equals(final String text) {
+      private boolean equals(@NotNull final String text) {
         if (!text.startsWith(PREFIX))
           return false;
-        final String sansPrefix = text.substring(PREFIX.length());
+        @NotNull final String sansPrefix = text.substring(PREFIX.length());
         return sansPrefix.equals(name) || alias != null && sansPrefix.equals(alias);
       }
-      private String extractValue(final Iterator<String> ¢) {
+      private String extractValue(@NotNull final Iterator<String> ¢) {
         if (isBoolean())
           return "true";
         if (!¢.hasNext())
@@ -614,74 +635,75 @@ public @interface External {
         ¢.remove();
         return $;
       }
-      String checkRequired() {
+      @Nullable String checkRequired() {
         if (mandatory)
           throw new RequiredOption();
         return null;
       }
-      void set(final Field f, final Object target, final String value) {
+      void set(@NotNull final Field f, final Object target, @Nullable final String value) {
         if (value != null)
           set(f, target, asObject(value));
       }
-      void set(final Field f, final Object target, final List<String> values) {
+      void set(@NotNull final Field f, final Object target, @NotNull final List<String> values) {
         set(f, target, asArrayObject(type.getComponentType(), values));
       }
-      void set(final Field f, final Object target, final Object value) {
+      void set(@NotNull final Field f, final Object target, @NotNull final Object value) {
         f.setAccessible(true);
         try {
           f.set(target, value);
-        } catch (final ExceptionInInitializerError e) {
+        } catch (@NotNull final ExceptionInInitializerError e) {
           throw new FieldInitializationError(f, value, e);
-        } catch (final IllegalAccessException e) {
+        } catch (@NotNull final IllegalAccessException e) {
           if (Modifier.isFinal(f.getModifiers()))
             throw new FieldIsFinal(f);
-        } catch (final IllegalArgumentException e) {
+        } catch (@NotNull final IllegalArgumentException e) {
           throw new WrongTarget(f, value, e);
         }
       }
-      void set(final PropertyDescriptor d, final Object target, final String value) {
+      void set(@NotNull final PropertyDescriptor d, final Object target, @Nullable final String value) {
         if (value != null)
           set(d, target, asObject(value));
       }
-      private void set(final PropertyDescriptor d, final Object target, final Object value) {
+      private void set(@NotNull final PropertyDescriptor d, final Object target, final Object value) {
         try {
           d.getWriteMethod().invoke(target, value);
-        } catch (final InvocationTargetException e) {
+        } catch (@NotNull final InvocationTargetException e) {
           throw new FieldConversionError(d, value, e);
-        } catch (final Exception e) {
+        } catch (@NotNull final Exception e) {
           throw new RuntimeException(e);
         }
       }
-      Object get(final Object o, final PropertyDescriptor d) {
+      @Nullable Object get(final Object o, @NotNull final PropertyDescriptor d) {
         final Method m = d.getReadMethod();
         if (m == null)
           return null;
         try {
           return m.invoke(o, (Object[]) null);
-        } catch (final Exception e) {
+        } catch (@NotNull final Exception e) {
           throw new FieldConversionError(d, e);
         }
       }
-      Object get(final Object o, final Method m) {
+      Object get(final Object o, @NotNull final Method m) {
         m.setAccessible(true);
         try {
           return m.invoke(o, (Object[]) null);
-        } catch (final Exception e) {
+        } catch (@NotNull final Exception e) {
           throw new FieldConversionError(m, e);
         }
       }
-      Object get(final Object o, final Field f) {
+      Object get(final Object o, @NotNull final Field f) {
         f.setAccessible(true);
         try {
           return f.get(o);
-        } catch (final Throwable e) {
+        } catch (@NotNull final Throwable e) {
           throw new FieldUnreadable(f, e);
         }
       }
-      private static boolean empty(final String ¢) {
+      private static boolean empty(@Nullable final String ¢) {
         return ¢ == null || "".equals(¢);
       }
-      private Object asObject(final String value) {
+      @Nullable
+      private Object asObject(@NotNull final String value) {
         return isBoolean() ? Boolean.TRUE
             : type == String.class ? value
                 : !type.isArray() ? instantiate(type, value) : asArrayObject(type.getComponentType(), value);
@@ -689,62 +711,64 @@ public @interface External {
       private boolean isBoolean() {
         return type == Boolean.class || type == Boolean.TYPE;
       }
-      private Object asArrayObject(final Class<?> c, final String value) {
-        final String[] strings = value.split(delimiter);
+      @Nullable
+      private Object asArrayObject(@NotNull final Class<?> c, @NotNull final String value) {
+        @NotNull final String[] strings = value.split(delimiter);
         if (c.isPrimitive())
           return asPrimitivesArrayObject(c, strings);
         if (c == String.class)
           return strings;
-        final Object[] $ = (Object[]) Array.newInstance(c, strings.length);
+        @NotNull final Object[] $ = (Object[]) Array.newInstance(c, strings.length);
         for (int ¢ = 0; ¢ < $.length; ++¢)
           $[¢] = instantiate(c, strings[¢]);
         return $;
       }
-      private Object asPrimitivesArrayObject(final Class<?> c, final String[] ss) {
+      private Object asPrimitivesArrayObject(@NotNull final Class<?> c, @NotNull final String[] ss) {
         if (c == byte.class) {
-          final byte[] $ = (byte[]) Array.newInstance(c, ss.length);
+          @NotNull final byte[] $ = (byte[]) Array.newInstance(c, ss.length);
           for (int ¢ = 0; ¢ < $.length; ++¢)
             $[¢] = ((Byte) instantiate(c, ss[¢])).byteValue();
           return $;
         }
         if (c == short.class) {
-          final short[] $ = (short[]) Array.newInstance(c, ss.length);
+          @NotNull final short[] $ = (short[]) Array.newInstance(c, ss.length);
           for (int ¢ = 0; ¢ < $.length; ++¢)
             $[¢] = ((Short) instantiate(c, ss[¢])).shortValue();
           return $;
         }
         if (c == int.class) {
-          final int[] $ = (int[]) Array.newInstance(c, ss.length);
+          @NotNull final int[] $ = (int[]) Array.newInstance(c, ss.length);
           for (int ¢ = 0; ¢ < $.length; ++¢)
             $[¢] = ((Integer) instantiate(c, ss[¢])).intValue();
           return $;
         }
         if (c == long.class) {
-          final long[] $ = (long[]) Array.newInstance(c, ss.length);
+          @NotNull final long[] $ = (long[]) Array.newInstance(c, ss.length);
           for (int ¢ = 0; ¢ < $.length; ++¢)
             $[¢] = ((Long) instantiate(c, ss[¢])).longValue();
           return $;
         }
         if (c == float.class) {
-          final float[] $ = (float[]) Array.newInstance(c, ss.length);
+          @NotNull final float[] $ = (float[]) Array.newInstance(c, ss.length);
           for (int ¢ = 0; ¢ < $.length; ++¢)
             $[¢] = ((Float) instantiate(c, ss[¢])).floatValue();
           return $;
         }
         if (c != double.class)
           return null;
-        final double[] $ = (double[]) Array.newInstance(c, ss.length);
+        @NotNull final double[] $ = (double[]) Array.newInstance(c, ss.length);
         for (int ¢ = 0; ¢ < $.length; ++¢)
           $[¢] = ((Double) instantiate(c, ss[¢])).doubleValue();
         return $;
       }
-      private Object asArrayObject(final Class<?> c, final List<String> values) {
-        final Object[] $ = (Object[]) Array.newInstance(c, values.size());
+      @NotNull
+      private Object asArrayObject(@NotNull final Class<?> c, @NotNull final List<String> values) {
+        @NotNull final Object[] $ = (Object[]) Array.newInstance(c, values.size());
         for (int ¢ = 0; ¢ < $.length; ++¢)
           $[¢] = instantiate(c, values.get(¢));
         return $;
       }
-      private Object instantiate(final Class<?> c, final String value) {
+      private Object instantiate(@NotNull final Class<?> c, @NotNull final String value) {
         try {
           if (c == byte.class)
             return Byte.valueOf(value);
@@ -758,39 +782,39 @@ public @interface External {
             return Double.valueOf(value);
           if (c == float.class)
             return Float.valueOf(value);
-        } catch (final NumberFormatException e) {
+        } catch (@NotNull final NumberFormatException e) {
           throw new NumericParsingError(value, e);
         }
         return c.isEnum() ? findEnum(c, value) : instantiate(getStringConstructor(c), value);
       }
-      private Object findEnum(final Class<?> c, final String value) {
+      private Object findEnum(@NotNull final Class<?> c, final String value) {
         try {
           return c.getDeclaredMethod("valueOf", String.class).invoke(null, value);
-        } catch (final InvocationTargetException e) {
+        } catch (@NotNull final InvocationTargetException e) {
           throw new InvalidEnumValue(value);
-        } catch (final Exception e) {
+        } catch (@NotNull final Exception e) {
           throw new RuntimeException(e);
         }
       }
-      private Object instantiate(final Constructor<?> c, final String value) {
+      private Object instantiate(@NotNull final Constructor<?> c, final String value) {
         try {
           return c.newInstance(value);
-        } catch (final Exception e) {
+        } catch (@NotNull final Exception e) {
           throw new FieldConversionError(c, value, e);
         }
       }
-      private Constructor<?> getStringConstructor(final Class<?> c) {
+      private Constructor<?> getStringConstructor(@NotNull final Class<?> c) {
         try {
           return c.getDeclaredConstructor(String.class);
-        } catch (final NoSuchMethodException e) {
+        } catch (@NotNull final NoSuchMethodException e) {
           throw new ConstructorWithSingleStringArgumentMissing(c, e);
         }
       }
       /**
        * [[SuppressWarningsSpartan]]
        */
-      String usage(final Object defaultValue) {
-        final StringBuilder $ = optionName();
+      @NotNull String usage(@Nullable final Object defaultValue) {
+        @NotNull final StringBuilder $ = optionName();
         $.append(" [").append(typeName()).append("] ").append(description);
         if (defaultValue == null)
           $.append(defaultValue);
@@ -799,7 +823,7 @@ public @interface External {
           if (!type.isArray())
             $.append(defaultValue);
           else {
-            final List<Object> list = new ArrayList<>();
+            @NotNull final List<Object> list = new ArrayList<>();
             final int len = Array.getLength(defaultValue);
             for (int ¢ = 0; ¢ < len; ++¢)
               list.add(Array.get(defaultValue, ¢));
@@ -811,11 +835,12 @@ public @interface External {
           $.append(" mandatory");
         return $ + "";
       }
+      @NotNull
       private String typeName() {
         if (isBoolean())
           return "flag";
         if (type.isEnum()) {
-          final StringBuilder $ = new StringBuilder();
+          @NotNull final StringBuilder $ = new StringBuilder();
           for (final Object ¢ : type.getEnumConstants()) {
             if ($.length() != 0)
               $.append("|");
@@ -825,13 +850,14 @@ public @interface External {
         }
         if (!type.isArray())
           return shortName(type);
-        final String componentName = shortName(type.getComponentType());
-        final StringBuilder $ = new StringBuilder(componentName);
+        @NotNull final String componentName = shortName(type.getComponentType());
+        @NotNull final StringBuilder $ = new StringBuilder(componentName);
         $.append(" (").append(delimiter).append(componentName).append(")*");
         return $ + "";
       }
+      @NotNull
       private StringBuilder optionName() {
-        final StringBuilder $ = new StringBuilder("  ").append(PREFIX).append(name);
+        @NotNull final StringBuilder $ = new StringBuilder("  ").append(PREFIX).append(name);
         if (alias != null)
           $.append(" (").append(PREFIX).append(alias).append(")");
         return $;
@@ -918,7 +944,7 @@ public @interface External {
       }
 
       class FieldInitializationError extends ReflectionError {
-        public FieldInitializationError(final Field f, final Object value, final ExceptionInInitializerError e) {
+        public FieldInitializationError(final Field f, @NotNull final Object value, final ExceptionInInitializerError e) {
           super("cannot set field " + f + " to '" + value + "' " + shortName(value.getClass()), e);
         }
 
@@ -942,7 +968,7 @@ public @interface External {
       }
 
       class ConstructorWithSingleStringArgumentMissing extends ReflectionError {
-        public ConstructorWithSingleStringArgumentMissing(final Class<?> c, final NoSuchMethodException e) {
+        public ConstructorWithSingleStringArgumentMissing(@NotNull final Class<?> c, final NoSuchMethodException e) {
           super("cannot find " + c.getName() + "(String) constructor", e);
         }
 
@@ -950,16 +976,16 @@ public @interface External {
       }
 
       class FieldConversionError extends ReflectionError {
-        public FieldConversionError(final Constructor<?> c, final String value, final Exception e) {
+        public FieldConversionError(@NotNull final Constructor<?> c, final String value, final Exception e) {
           super("'" + value + "' could not be converted into " + shortName(c.getDeclaringClass()), e);
         }
-        public FieldConversionError(final PropertyDescriptor p, final Object value, final InvocationTargetException e) {
+        public FieldConversionError(@NotNull final PropertyDescriptor p, final Object value, final InvocationTargetException e) {
           super("'" + value + "' could not be assigned into " + p.getName(), e);
         }
-        public FieldConversionError(final PropertyDescriptor p, final Exception e) {
+        public FieldConversionError(@NotNull final PropertyDescriptor p, final Exception e) {
           super("property '" + p.getName() + "' could not be read", e);
         }
-        public FieldConversionError(final Method m, final Exception e) {
+        public FieldConversionError(@NotNull final Method m, final Exception e) {
           super("method '" + m.getName() + "' could not be invoked " + e, e);
         }
 
