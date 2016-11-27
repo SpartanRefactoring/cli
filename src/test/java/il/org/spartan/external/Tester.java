@@ -150,8 +150,7 @@ public class Tester extends Generator {
 
   @Test public void stringOption() {
     class ____ {
-      @NotNull
-      @External public String s = "This is the time";
+      @NotNull @External public String s = "This is the time";
     }
     @NotNull final ____ ____ = new ____();
     extract(args("-s", "for all good men"), ____);
@@ -165,8 +164,7 @@ public class Tester extends Generator {
 
   @Test public void integeArrayOption() {
     class option {
-      @NotNull
-      @External public Integer[] is = { Integer.valueOf(nextInt()) };
+      @NotNull @External public Integer[] is = { Integer.valueOf(nextInt()) };
     }
     @NotNull final option i = new option();
     extract(args("-is", "1,2,3"), this, i);
@@ -178,8 +176,7 @@ public class Tester extends Generator {
 
   @Test public void byteArrayOption() {
     class option {
-      @NotNull
-      @External public byte[] bs = { 3, 19, 12, 17 };
+      @NotNull @External public byte[] bs = { 3, 19, 12, 17 };
     }
     @NotNull final option o = new option();
     extract(args("-bs", "-33,19,5,1,2,3"), this, o);
@@ -195,8 +192,7 @@ public class Tester extends Generator {
 
   @Test public void shortArrayOption() {
     class option {
-      @NotNull
-      @External public short[] ss = { (short) nextInt() };
+      @NotNull @External public short[] ss = { (short) nextInt() };
     }
     @NotNull final option i = new option();
     extract(args("-ss", "5,1,2,3"), this, i);
@@ -209,8 +205,7 @@ public class Tester extends Generator {
 
   @Test public void intArrayOption() {
     class option {
-      @NotNull
-      @External public int[] is = { nextInt() };
+      @NotNull @External public int[] is = { nextInt() };
     }
     @NotNull final option i = new option();
     extract(args("-is", "1,2,3"), this, i);
@@ -222,8 +217,7 @@ public class Tester extends Generator {
 
   @Test public void longArrayOption() {
     class option {
-      @NotNull
-      @External public long[] ls = { (short) nextInt() };
+      @NotNull @External public long[] ls = { (short) nextInt() };
     }
     @NotNull final option o = new option();
     extract(args("-ls", "19,5,1,2,3"), this, o);
@@ -238,8 +232,7 @@ public class Tester extends Generator {
 
   @Test public void floatArrayOption() {
     class option {
-      @NotNull
-      @External public float[] fs = { 3, 19, 12, 17 };
+      @NotNull @External public float[] fs = { 3, 19, 12, 17 };
     }
     @NotNull final option o = new option();
     extract(args("-fs", "11.2,-33,19,5,1,2,3"), this, o);
@@ -256,8 +249,7 @@ public class Tester extends Generator {
 
   @Test public void doubleArrayOption() {
     class option {
-      @NotNull
-      @External public double[] ds = { 3, 19, 12, 17 };
+      @NotNull @External public double[] ds = { 3, 19, 12, 17 };
     }
     @NotNull final option o = new option();
     extract(args("-ds", "-32.1,11.2,-33,19,5,1,2,3"), this, o);
@@ -522,6 +514,7 @@ public class Tester extends Generator {
   }
 
   @Test public void toOrderedMapNoObjects() {
+    // Intentionally empty
   }
 
   @Test public void toOrderedMapTwoObjects() {
@@ -557,18 +550,15 @@ public class Tester extends Generator {
 
   @Test public void toOrderedMapGetterMethods() {
     final Map<String, String> m = Introspector.toOrderedMap(new Object() {
-      @NotNull
-      @External String method1() {
+      @NotNull @External String method1() {
         return "value1";
       }
 
-      @NotNull
-      @External String method2() {
+      @NotNull @External String method2() {
         return "value2";
       }
 
-      @NotNull
-      @External String method3() {
+      @NotNull @External String method3() {
         return "value3";
       }
     });
@@ -934,8 +924,7 @@ public class Tester extends Generator {
 
   @Test public void settingsContainsKeyValue() {
     final String it = settings(new Object() {
-      @NotNull
-      @External String option = "value";
+      @NotNull @External String option = "value";
     });
     assertThat(it, containsString("option"));
     assertThat(it, containsString("value"));
@@ -1109,8 +1098,7 @@ public class Tester extends Generator {
 
   @Test(expected = DuplicateOption.class) public void simpleRepeatedOption() {
     extract(args("-option", nextIntS(), "-option", nextIntS()), new Object() {
-      @NotNull
-      @External public String option = nextIntS();
+      @NotNull @External public String option = nextIntS();
     });
   }
 
@@ -1163,8 +1151,7 @@ public class Tester extends Generator {
 
   @Test public void usageArray() {
     assertThat(usage(new Object() {
-      @NotNull
-      @External String[] strings = { "Hello", "World!" };
+      @NotNull @External String[] strings = { "Hello", "World!" };
     }), containsString("Hello, World!"));
   }
 
@@ -1297,15 +1284,12 @@ public class Tester extends Generator {
   }
 
   private static class PrivateStaticField {
-    @NotNull
-    @External private static Date optionNamePrivateStaticField = new Date();
+    @NotNull @External private static Date optionNamePrivateStaticField = new Date();
   }
 
   private static class PublicStaticFields {
-    @NotNull
-    @External public static Date optionNamePublicField = new Date();
-    @NotNull
-    @External public static String stringOption = new Tester().lastInt() + "";
+    @NotNull @External public static Date optionNamePublicField = new Date();
+    @NotNull @External public static String stringOption = new Tester().lastInt() + "";
   }
 
   private static class ExceptionThrowingInitializationOfField extends Tester {
@@ -1422,8 +1406,7 @@ public class Tester extends Generator {
     return ¢;
   }
 
-  @NotNull
-  private String[] args(final int i) {
+  @NotNull private String[] args(final int i) {
     @NotNull final String[] $ = new String[i];
     for (int ¢ = 0; ¢ < i; ++¢)
       $[¢] = "N" + nextLong();
@@ -1448,8 +1431,7 @@ class Generator {
     return lastInt = inner.nextInt();
   }
 
-  @NotNull
-  public String nextIntS() {
+  @NotNull public String nextIntS() {
     return nextInt() + "";
   }
 
@@ -1514,8 +1496,7 @@ class RegexMatcher extends BaseMatcher<String> {
     ¢.appendText("matches regex=");
   }
 
-  @NotNull
-  public static RegexMatcher matches(final String regex) {
+  @NotNull public static RegexMatcher matches(final String regex) {
     return new RegexMatcher(regex);
   }
 }

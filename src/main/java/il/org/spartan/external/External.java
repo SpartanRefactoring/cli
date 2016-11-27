@@ -419,8 +419,8 @@ public @interface External {
         @Nullable final Argument a = Argument.make(f);
         if (a != null)
           a.set(f, target, a.extractValue(arguments));
-      } catch (@NotNull final Error e) {
-        errors.add(e);
+      } catch (@NotNull final Error ¢) {
+        errors.add(¢);
       }
     }
     private void extractInto(final Object target, @NotNull final PropertyDescriptor d, @NotNull final List<String> arguments) {
@@ -428,8 +428,8 @@ public @interface External {
         @Nullable final Argument a = Argument.make(d);
         if (a != null)
           a.set(d, target, a.extractValue(arguments));
-      } catch (@NotNull final Error e) {
-        errors.add(e);
+      } catch (@NotNull final Error ¢) {
+        errors.add(¢);
       }
     }
     /**
@@ -471,8 +471,8 @@ public @interface External {
     @NotNull
     private static List<Field> fields(final Class<?> base) {
       @NotNull final ArrayList<Field> $ = new ArrayList<>();
-      for (Class<?> c = base; c != null; c = c.getSuperclass())
-        Collections.addAll($, c.getDeclaredFields());
+      for (Class<?> ¢ = base; ¢ != null; ¢ = ¢.getSuperclass())
+        Collections.addAll($, ¢.getDeclaredFields());
       return $;
     }
     @NotNull
@@ -612,13 +612,13 @@ public @interface External {
         return ¢.get(name) != null ? (String) ¢.get(name) : alias != null ? (String) ¢.get(alias) : checkRequired();
       }
       @Nullable String extractValue(@NotNull final List<String> arguments) {
-        @Nullable final Iterator<String> i = find(arguments);
-        if (i == null)
+        @Nullable final Iterator<String> $ = find(arguments);
+        if ($ == null)
           return checkRequired();
-        i.remove();
+        $.remove();
         if (find(arguments) != null)
           throw new DuplicateOption();
-        return extractValue(i);
+        return extractValue($);
       }
       private boolean equals(@NotNull final String text) {
         if (!text.startsWith(PREFIX))
@@ -651,13 +651,13 @@ public @interface External {
         f.setAccessible(true);
         try {
           f.set(target, value);
-        } catch (@NotNull final ExceptionInInitializerError e) {
-          throw new FieldInitializationError(f, value, e);
+        } catch (@NotNull final ExceptionInInitializerError ¢) {
+          throw new FieldInitializationError(f, value, ¢);
         } catch (@NotNull final IllegalAccessException e) {
           if (Modifier.isFinal(f.getModifiers()))
             throw new FieldIsFinal(f);
-        } catch (@NotNull final IllegalArgumentException e) {
-          throw new WrongTarget(f, value, e);
+        } catch (@NotNull final IllegalArgumentException ¢) {
+          throw new WrongTarget(f, value, ¢);
         }
       }
       void set(@NotNull final PropertyDescriptor d, final Object target, @Nullable final String value) {
@@ -667,10 +667,10 @@ public @interface External {
       private void set(@NotNull final PropertyDescriptor d, final Object target, final Object value) {
         try {
           d.getWriteMethod().invoke(target, value);
-        } catch (@NotNull final InvocationTargetException e) {
-          throw new FieldConversionError(d, value, e);
-        } catch (@NotNull final Exception e) {
-          throw new RuntimeException(e);
+        } catch (@NotNull final InvocationTargetException ¢) {
+          throw new FieldConversionError(d, value, ¢);
+        } catch (@NotNull final Exception ¢) {
+          throw new RuntimeException(¢);
         }
       }
       @Nullable Object get(final Object o, @NotNull final PropertyDescriptor d) {
@@ -679,24 +679,24 @@ public @interface External {
           return null;
         try {
           return m.invoke(o, (Object[]) null);
-        } catch (@NotNull final Exception e) {
-          throw new FieldConversionError(d, e);
+        } catch (@NotNull final Exception ¢) {
+          throw new FieldConversionError(d, ¢);
         }
       }
       Object get(final Object o, @NotNull final Method m) {
         m.setAccessible(true);
         try {
           return m.invoke(o, (Object[]) null);
-        } catch (@NotNull final Exception e) {
-          throw new FieldConversionError(m, e);
+        } catch (@NotNull final Exception ¢) {
+          throw new FieldConversionError(m, ¢);
         }
       }
       Object get(final Object o, @NotNull final Field f) {
         f.setAccessible(true);
         try {
           return f.get(o);
-        } catch (@NotNull final Throwable e) {
-          throw new FieldUnreadable(f, e);
+        } catch (@NotNull final Throwable ¢) {
+          throw new FieldUnreadable(f, ¢);
         }
       }
       private static boolean empty(@Nullable final String ¢) {
@@ -782,8 +782,8 @@ public @interface External {
             return Double.valueOf(value);
           if (c == float.class)
             return Float.valueOf(value);
-        } catch (@NotNull final NumberFormatException e) {
-          throw new NumericParsingError(value, e);
+        } catch (@NotNull final NumberFormatException ¢) {
+          throw new NumericParsingError(value, ¢);
         }
         return c.isEnum() ? findEnum(c, value) : instantiate(getStringConstructor(c), value);
       }
@@ -792,22 +792,22 @@ public @interface External {
           return c.getDeclaredMethod("valueOf", String.class).invoke(null, value);
         } catch (@NotNull final InvocationTargetException e) {
           throw new InvalidEnumValue(value);
-        } catch (@NotNull final Exception e) {
-          throw new RuntimeException(e);
+        } catch (@NotNull final Exception ¢) {
+          throw new RuntimeException(¢);
         }
       }
       private Object instantiate(@NotNull final Constructor<?> c, final String value) {
         try {
           return c.newInstance(value);
-        } catch (@NotNull final Exception e) {
-          throw new FieldConversionError(c, value, e);
+        } catch (@NotNull final Exception ¢) {
+          throw new FieldConversionError(c, value, ¢);
         }
       }
       private Constructor<?> getStringConstructor(@NotNull final Class<?> c) {
         try {
           return c.getDeclaredConstructor(String.class);
-        } catch (@NotNull final NoSuchMethodException e) {
-          throw new ConstructorWithSingleStringArgumentMissing(c, e);
+        } catch (@NotNull final NoSuchMethodException ¢) {
+          throw new ConstructorWithSingleStringArgumentMissing(c, ¢);
         }
       }
       /**

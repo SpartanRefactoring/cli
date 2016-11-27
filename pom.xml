@@ -3,7 +3,7 @@
   <groupId>il.org.spartan</groupId>
   <artifactId>cli</artifactId>
   <packaging>jar</packaging>
-  <version>1.01</version>
+  <version>1.02</version>
 
   <name>Spartan CLI</name>
   <description>A command line interface processor</description>
@@ -46,6 +46,11 @@
       <version>4.12</version>
       <scope>test</scope>
     </dependency>
+            <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>RELEASE</version>
+        </dependency>
   </dependencies>
   
   <build>
