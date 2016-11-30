@@ -338,8 +338,8 @@ public @interface External {
     }
     @NotNull
     private static String usage(final Object target, @NotNull final PropertyDescriptor d) {
-      @Nullable final Argument a = Argument.make(d);
-      return a == null ? "" : a.usage(a.get(target, d)) + "\n";
+      @Nullable final Argument $ = Argument.make(d);
+      return $ == null ? "" : $.usage($.get(target, d)) + "\n";
     }
     @NotNull
     private static String usage(final Object target, @NotNull final Field f) {
@@ -572,9 +572,9 @@ public @interface External {
           $.append($.length() == 0 ? "" : delimiter).append(¢);
         return $ + "";
       }
-      static Argument make(@NotNull final PropertyDescriptor d) {
-        final Method m = d.getWriteMethod();
-        return m == null ? null : Argument.make(m.getAnnotation(External.class), d.getName(), d.getPropertyType());
+      static Argument make(@NotNull final PropertyDescriptor ¢) {
+        final Method $ = ¢.getWriteMethod();
+        return $ == null ? null : Argument.make($.getAnnotation(External.class), ¢.getName(), ¢.getPropertyType());
       }
       @Nullable
       static Argument make(@Nullable final External x, final String name, final Class<?> type) {
@@ -623,8 +623,8 @@ public @interface External {
       private boolean equals(@NotNull final String text) {
         if (!text.startsWith(PREFIX))
           return false;
-        @NotNull final String sansPrefix = text.substring(PREFIX.length());
-        return sansPrefix.equals(name) || alias != null && sansPrefix.equals(alias);
+        @NotNull final String $ = text.substring(PREFIX.length());
+        return $.equals(name) || alias != null && $.equals(alias);
       }
       private String extractValue(@NotNull final Iterator<String> ¢) {
         if (isBoolean())
@@ -674,11 +674,11 @@ public @interface External {
         }
       }
       @Nullable Object get(final Object o, @NotNull final PropertyDescriptor d) {
-        final Method m = d.getReadMethod();
-        if (m == null)
+        final Method $ = d.getReadMethod();
+        if ($ == null)
           return null;
         try {
-          return m.invoke(o, (Object[]) null);
+          return $.invoke(o, (Object[]) null);
         } catch (@NotNull final Exception ¢) {
           throw new FieldConversionError(d, ¢);
         }
