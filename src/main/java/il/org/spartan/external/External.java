@@ -363,8 +363,7 @@ public @interface External {
     }
 
     private void extractIntoInstance(@NotNull final Object target, @NotNull final List<String> arguments) {
-      final Class<?> c;
-      c = target.getClass();
+      final Class<?> c = target.getClass();
       for (@NotNull final PropertyDescriptor ¢ : descriptors(c))
         extractInto(target, ¢, arguments);
       for (@NotNull final Field ¢ : fields(c))
@@ -557,8 +556,7 @@ public @interface External {
       }
 
       static Argument make(@NotNull final PropertyDescriptor ¢) {
-        final Method $;
-        $ = ¢.getWriteMethod();
+        final Method $ = ¢.getWriteMethod();
         return $ == null ? null : Argument.make($.getAnnotation(External.class), ¢.getName(), ¢.getPropertyType());
       }
 
@@ -625,8 +623,7 @@ public @interface External {
           return "true";
         if (!¢.hasNext())
           throw new MissingValueForOption();
-        final String $;
-        $ = ¢.next();
+        final String $ = ¢.next();
         ¢.remove();
         return $;
       }
@@ -676,8 +673,7 @@ public @interface External {
       }
 
       @Nullable Object get(final Object o, @NotNull final PropertyDescriptor d) {
-        final Method $;
-        $ = d.getReadMethod();
+        final Method $ = d.getReadMethod();
         if ($ == null)
           return null;
         try {
