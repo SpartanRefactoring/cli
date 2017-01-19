@@ -823,7 +823,8 @@ public class Tester extends Generator {
   }
 
   @Test public void inheritedRequiredStaticFields() {
-    assertEquals(0, extract(args("-output", "outputValue", "-key", "keyValue", "-inheritedkey", "inheritedKeyValue"), InhertingFromRequiredFields.class).size());
+    assertEquals(0,
+        extract(args("-output", "outputValue", "-key", "keyValue", "-inheritedkey", "inheritedKeyValue"), InhertingFromRequiredFields.class).size());
     assert RequiredStaticFields.key != null;
     assert RequiredStaticFields.output != null;
     assertEquals("outputValue", RequiredStaticFields.output);
@@ -866,8 +867,7 @@ public class Tester extends Generator {
   }
 
   @Test public void optionInConstructorSubSubClass() {
-    final int oldValue = 173;
-    final int newValue = 43 * oldValue + 19;
+    final int oldValue = 173, newValue = 43 * oldValue + 19;
     abstract class B0 {
       abstract int option();
 
@@ -1015,13 +1015,13 @@ public class Tester extends Generator {
 
   @Test public void usageValueFieldFoundInDescription() {
     assertThat(usage(new Object() {
-      @External("lorem ipsum") public int a;
+      @External("lorem ipsum") int a;
     }), containsString("lorem ipsum"));
   }
 
   @Test public void usageullDescriptionConcatenatesValueAndDescription() {
     assertThat(usage(new Object() {
-      @External(value = "lorem ip", description = "sum") public int a;
+      @External(value = "lorem ip", description = "sum") int a;
     }), containsString("lorem ipsum"));
   }
 
@@ -1084,13 +1084,13 @@ public class Tester extends Generator {
 
   @Test(expected = DuplicateOption.class) public void simpleRepeatedOption() {
     extract(args("-option", nextIntS(), "-option", nextIntS()), new Object() {
-      @External @NotNull public String option = nextIntS();
+      @External @NotNull String option = nextIntS();
     });
   }
 
   @Test(expected = NumericParsingError.class) public void numericError() {
     extract(args("-option", "ab" + nextInt()), new Object() {
-      @External public int option = nextInt();
+      @External int option = nextInt();
     });
   }
 
@@ -1104,30 +1104,28 @@ public class Tester extends Generator {
   @Test(expected = ConstructorWithSingleStringArgumentMissing.class) //
   public void missingStringConstructor() {
     class LocalClass {
-      {
-        /* Demo */
-      }
+      // Empty
     }
     extract(args("-option", nextIntS()), new Object() {
-      @External public LocalClass option;
+      @External LocalClass option;
     });
   }
 
   @Test(expected = FieldConversionError.class) public void constructorThrowsException() throws Exception {
     extract(args("-option", "value"), new Object() {
-      @External public OptionClass option;
+      @External OptionClass option;
     });
   }
 
   @Test(expected = MissingValueForOption.class) public void missingValue() {
     extract(args("blah", "-option"), new Object() {
-      @External public int option;
+      @External int option;
     });
   }
 
   @Test(expected = RequiredOption.class) public void missingRequiredOptionProperties() {
     extract(new Properties(), new Object() {
-      @External(required = true) public int option;
+      @External(required = true) int option;
     });
   }
 
