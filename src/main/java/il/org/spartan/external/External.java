@@ -227,10 +227,10 @@ public @interface External {
       return $;
     }
 
-    private static void addEntry(@NotNull final Map<String, String> s, final Object target, @NotNull final Field f) {
+    private static void addEntry(@NotNull final Map<String, String> m, final Object target, @NotNull final Field f) {
       @Nullable final Argument a = Argument.make(f);
-      if (a != null && !s.containsKey(a.name))
-        s.put(a.name, a.asString(a.get(target, f)));
+      if (a != null && !m.containsKey(a.name))
+        m.put(a.name, a.asString(a.get(target, f)));
     }
 
     private static void addEntry(@NotNull final Map<String, String> s, final Object target, @NotNull final Method m) {
@@ -239,10 +239,10 @@ public @interface External {
         s.put(a.name, a.asString(a.get(target, m)));
     }
 
-    private static void addEntry(@NotNull final Map<String, String> s, final Object target, @NotNull final PropertyDescriptor d) {
+    private static void addEntry(@NotNull final Map<String, String> m, final Object target, @NotNull final PropertyDescriptor d) {
       @Nullable final Argument a = Argument.make(d);
-      if (a != null && !s.containsKey(a.name))
-        s.put(a.name, a.asString(a.get(target, d)));
+      if (a != null && !m.containsKey(a.name))
+        m.put(a.name, a.asString(a.get(target, d)));
     }
 
     /** Convert the settings in the parameter to a {@link Properties} object.
