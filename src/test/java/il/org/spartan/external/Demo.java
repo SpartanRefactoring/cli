@@ -6,12 +6,16 @@
  * href=http://code.google.com/p/cli-parser/>here</a>. */
 package il.org.spartan.external;
 
+import static il.org.spartan.external.External.Introspector.extract;
+import static il.org.spartan.external.External.Introspector.settings;
+import static il.org.spartan.external.External.Introspector.toProperties;
+import static il.org.spartan.external.External.Introspector.usage;
+import static il.org.spartan.external.External.Introspector.usageErrorExit;
+
+import java.io.File;
+import java.util.List;
+
 import org.jetbrains.annotations.NotNull;
-
-import static il.org.spartan.external.External.Introspector.*;
-
-import java.io.*;
-import java.util.*;
 
 /** A simple demonstration of the capabilities of use of {@link External} and
  * the extraction of command line arguments.

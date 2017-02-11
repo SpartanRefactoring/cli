@@ -10,15 +10,33 @@
 */
 package il.org.spartan.external;
 
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Properties;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.beans.*;
-import java.lang.annotation.*;
-import java.lang.reflect.*;
-import java.util.*;
-import java.util.Map.*;
-import java.util.stream.Collectors;
 
 /** Annotation for <code><b>static</b></code> and non-<code><b>static</b></code>
  * data members whose value can be set, externally, i.e., not by usual
@@ -478,7 +496,7 @@ public @interface External {
     }
 
     private void check(@NotNull final List<String> arguments) {
-      errors.addAll(arguments.stream().filter(argument -> argument.startsWith("-")).map(UnrecognizedOption::new).collect(Collectors.toList()));
+      errors.addAll(arguments.stream().filter(λ -> λ.startsWith("-")).map(UnrecognizedOption::new).collect(Collectors.toList()));
     }
 
     private abstract static class Error extends RuntimeException {
