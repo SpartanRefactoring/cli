@@ -416,15 +416,8 @@ public class Tester extends Generator {
       }
     }
     @NotNull final ____ ____ = new ____();
-    final List<String> extra = extract(args( //
-        "-input", "inputfile", //
-        "-o", "outputfile", //
-        "extra1", //
-        "-someoption", //
-        "extra2", //
-        "-m", "10", //
-        "-values", "1:2:3"//
-    ), ____);
+    final List<String> extra = extract(
+        args("-input", "inputfile", "-o", "outputfile", "extra1", "-someoption", "extra2", "-m", "10", "-values", "1:2:3"), ____);
     assertEquals("inputfile", ____.getOption());
     assertEquals(new File("outputfile"), ____.getOutputFile());
     assert !____.isSomeotheroption();
@@ -457,19 +450,8 @@ public class Tester extends Generator {
 
   @Test public void remainingArguments() {
     @NotNull final TestCommand tc = new TestCommand();
-    final List<String> extra = extract(args( //
-        "this", //
-        "-input", "inputfile", //
-        "is", "-o", "outputfile", //
-        "the", //
-        "-someoption", //
-        "time", //
-        "-m", "10", //
-        "for", "all", //
-        "-values", "1:2:3", //
-        "-strings", "sam;dave;jolly", //
-        "good", "men"//
-    ), tc);
+    final List<String> extra = extract(args("this", "-input", "inputfile", "is", "-o", "outputfile", "the", "-someoption", "time", "-m", "10", "for",
+        "all", "-values", "1:2:3", "-strings", "sam;dave;jolly", "good", "men"), tc);
     assertEquals("inputfile", tc.inputFilename);
     assertEquals(new File("outputfile"), tc.outputFile);
     assert tc.someoption;
@@ -1190,8 +1172,7 @@ public class Tester extends Generator {
       @External final String firstOption = "firstValue";
       @External final String secondOption = "secondValue";
 
-      @External public void setOption(@SuppressWarnings("unused") final String option) {
-        // Empty, just for testing
+      @External public void setOption(@SuppressWarnings("unused") final String option) {/** EMPTY **/
       }
     });
     assertThat(usage, containsString("firstOption"));
