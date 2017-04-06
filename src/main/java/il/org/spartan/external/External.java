@@ -508,7 +508,7 @@ public @interface External {
         super(message);
       }
 
-      private static final long serialVersionUID = 1L;
+      private static final long serialVersionUID = 1;
     }
 
     public static final class NonArray extends Error {
@@ -516,7 +516,7 @@ public @interface External {
         super(field + ": is not an array type");
       }
 
-      private static final long serialVersionUID = 1L;
+      private static final long serialVersionUID = 1;
     }
 
     private abstract static class ArgumentError extends Error {
@@ -528,7 +528,7 @@ public @interface External {
         super(option + ": " + error);
       }
 
-      private static final long serialVersionUID = 1L;
+      private static final long serialVersionUID = 1;
     }
 
     public static class UnrecognizedOption extends ArgumentError {
@@ -536,7 +536,7 @@ public @interface External {
         super(argument, "Unrecognized option");
       }
 
-      private static final long serialVersionUID = 1L;
+      private static final long serialVersionUID = 1;
     }
 
     static class Argument {
@@ -895,7 +895,7 @@ public @interface External {
           super(name, error, cause);
         }
 
-        private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1;
       }
 
       public abstract class ParsingError extends Error {
@@ -907,7 +907,7 @@ public @interface External {
           super(error, cause);
         }
 
-        private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1;
       }
 
       /** An exception thrown in the case of failure to read or set a data
@@ -923,7 +923,7 @@ public @interface External {
           super(error, cause);
         }
 
-        private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1;
       }
 
       public class InvalidEnumValue extends ReflectionError {
@@ -931,7 +931,7 @@ public @interface External {
           super("'" + value + "' is not a legal value");
         }
 
-        private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1;
       }
 
       public class FieldUnreadable extends ReflectionError {
@@ -939,7 +939,7 @@ public @interface External {
           super("Cannot read content of field " + f, e);
         }
 
-        private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1;
       }
 
       public class DuplicateOption extends ParsingError {
@@ -947,7 +947,7 @@ public @interface External {
           super("duplicate option");
         }
 
-        private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1;
       }
 
       public class MissingValueForOption extends ParsingError {
@@ -955,7 +955,7 @@ public @interface External {
           super("Missing value for this option");
         }
 
-        private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1;
       }
 
       public class FieldIsFinal extends ReflectionError {
@@ -963,7 +963,7 @@ public @interface External {
           super("Field " + f + " is final");
         }
 
-        private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1;
       }
 
       class FieldInitializationError extends ReflectionError {
@@ -971,7 +971,7 @@ public @interface External {
           super("cannot set field " + f + " to '" + value + "' " + shortName(value.getClass()), e);
         }
 
-        private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1;
       }
 
       class RequiredOption extends ParsingError {
@@ -979,7 +979,7 @@ public @interface External {
           super("option must be assigned");
         }
 
-        private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1;
       }
 
       class NumericParsingError extends ParsingError {
@@ -987,7 +987,7 @@ public @interface External {
           super("error parsing value '" + value + "'", e);
         }
 
-        private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1;
       }
 
       class ConstructorWithSingleStringArgumentMissing extends ReflectionError {
@@ -995,7 +995,7 @@ public @interface External {
           super("cannot find " + c.getName() + "(String) constructor", e);
         }
 
-        private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1;
       }
 
       class FieldConversionError extends ReflectionError {
@@ -1015,7 +1015,7 @@ public @interface External {
           super("method '" + m.getName() + "' could not be invoked " + e, e);
         }
 
-        private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1;
       }
 
       class WrongTarget extends ReflectionError {
@@ -1023,7 +1023,7 @@ public @interface External {
           super(f + ": could not be assigned value '" + value + "'; try using an instance rather than a class object", e);
         }
 
-        private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1;
       }
     }
   }

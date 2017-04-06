@@ -465,7 +465,7 @@ public class Tester extends Generator {
   @Test public void properties() {
     @NotNull final TestCommand ____ = new TestCommand();
     extract(new Properties() {
-      static final long serialVersionUID = 1L;
+      static final long serialVersionUID = 1;
       {
         put("input", "inputfile");
         put("o", "outputfile");
@@ -500,7 +500,7 @@ public class Tester extends Generator {
       {
         put("option", nextIntS());
       }
-      static final long serialVersionUID = 1L;
+      static final long serialVersionUID = 1;
     }, ____);
     assertEquals(lastInt(), ____.hashCode());
   }
@@ -743,7 +743,7 @@ public class Tester extends Generator {
       {
         put("option", nextIntS());
       }
-      static final long serialVersionUID = 1L;
+      static final long serialVersionUID = 1;
     }, ClassWithEnumOption.class);
   }
 
@@ -753,7 +753,7 @@ public class Tester extends Generator {
       {
         put("hashCode", nextIntS());
       }
-      static final long serialVersionUID = 1L;
+      static final long serialVersionUID = 1;
     }, new Object() {
       @External public void setHashCode(final int hashCode) {
         throw new RuntimeException(hashCode + "");
